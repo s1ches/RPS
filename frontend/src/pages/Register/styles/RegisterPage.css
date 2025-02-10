@@ -1,0 +1,92 @@
+/* Общие стили для RegisterPage */
+
+/* Контейнер страницы */
+.registerPage__container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+
+
+}
+
+/* Заголовок */
+.registerPage__header {
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    color: #2c3e50; /* Темно-серый */
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Формы */
+.registerPage__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Поля ввода */
+.registerPage__input {
+    padding: 15px;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+    background-color: #fafafa;
+}
+
+.registerPage__input:focus {
+    border-color: #4db8ff; /* Голубой при фокусе */
+}
+
+/* Кнопки */
+.registerPage__button {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s;
+    margin-top: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопка Зарегистрироваться */
+.registerPage__button:first-child {
+    background-color: #ff4081; /* Ярко-розовый для кнопки Зарегистрироваться */
+}
+
+.registerPage__button:first-child:hover {
+    background-color: #e1005e; /* Темный розовый при наведении */
+    transform: scale(1.05);
+}
+
+/* Кнопка Войти */
+.registerPage__button:last-child {
+    background-color: #007bff; /* Ярко-синий для кнопки Войти */
+    margin-top: 20px;
+}
+
+.registerPage__button:last-child:hover {
+    background-color: #0062cc; /* Темный синий при наведении */
+    transform: scale(1.05);
+}
+
+/* Прочее */
+.registerPage__button:focus {
+    outline: none;
+}
