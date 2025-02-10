@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RPS.Common'", "RPS.Common'", "{0F6304A7-71D6-4B90-AD6F-EEED1A45CA7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPS.Common", "RPS.Common\RPS.Common.csproj", "{322AD961-4BF1-43B4-8529-6D06B3D8FF54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RPS.Services", "RPS.Services", "{02A8A97B-DE54-4802-8DAF-B51C940B51CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPS.Services.Auth", "RPS.Services.Auth\RPS.Services.Auth.csproj", "{014D0F9B-5A76-432D-A456-22D0A147DDE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{322AD961-4BF1-43B4-8529-6D06B3D8FF54} = {0F6304A7-71D6-4B90-AD6F-EEED1A45CA7B}
+		{014D0F9B-5A76-432D-A456-22D0A147DDE6} = {02A8A97B-DE54-4802-8DAF-B51C940B51CF}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{322AD961-4BF1-43B4-8529-6D06B3D8FF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322AD961-4BF1-43B4-8529-6D06B3D8FF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322AD961-4BF1-43B4-8529-6D06B3D8FF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322AD961-4BF1-43B4-8529-6D06B3D8FF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014D0F9B-5A76-432D-A456-22D0A147DDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014D0F9B-5A76-432D-A456-22D0A147DDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014D0F9B-5A76-432D-A456-22D0A147DDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014D0F9B-5A76-432D-A456-22D0A147DDE6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
