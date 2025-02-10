@@ -5,7 +5,7 @@ import { useUserStore } from '../../stores/userStore';
 import './styles/LoginPage.css'
 
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
+    const [username, setusername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useUserStore();
@@ -15,7 +15,6 @@ const LoginPage = () => {
         try {
             const user = await loginUser(username, password);
             login(user); // Обновляем состояние пользователя
-            localStorage.setItem('token', 'fake-jwt-token'); // TODO, замени на реальный токен
             navigate('/'); // Перенаправляем на главную страницу
         } catch (error) {
             alert('Ошибка при входе: ' + error.message);
@@ -29,9 +28,9 @@ const LoginPage = () => {
                 <input
                     className="loginPage__input"
                     type="text"
-                    placeholder="Username"
+                    placeholder="Email"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setusername(e.target.value)}
                     required
                 />
                 <input

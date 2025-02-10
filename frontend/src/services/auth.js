@@ -1,10 +1,10 @@
 import { api } from './api';  // axios-экземпляр для запросов
 
 // Регистрация пользователя
-export const registerUser = async (username, password) => {
+export const registerUser = async (username, email, password) => {
     try {
-        const response = await api.post('/auth/register', { username, password });
-        return response.data;  // Возвращаем данные пользователя или токен
+        const response = await api.post('/auth/register', { username, email, password });
+        return response.data.accessToken;  // Возвращаем данные пользователя или токен
     } catch (error) {
         console.error('Ошибка регистрации:', error.response?.data?.message || error.message);
         return { error: 'Ошибка при регистрации' };  // Возвращаем ошибку, а не выбрасываем исключение
@@ -12,12 +12,12 @@ export const registerUser = async (username, password) => {
 };
 
 // Логин пользователя
-export const loginUser = async (username, password) => {
+export const loginUser = async (email, password) => {
     try {
-        const response = await api.post('/auth/login', { username, password });
-        const { token, user } = response.data;  // Получаем токен и данные пользователя
-        localStorage.setItem('token', token);  // Сохраняем токен в localStorage
-        return { user };  // Возвращаем данные пользователя
+        const response = await api.post('/auth/login', { email, password });
+        const token = response.data.accessToken;
+        localStorage.setItem('token', token);
+        return { token };
     } catch (error) {
         console.error('Ошибка авторизации:', error.response?.data?.message || error.message);
         return { error: 'Ошибка при авторизации' };  // Возвращаем ошибку
