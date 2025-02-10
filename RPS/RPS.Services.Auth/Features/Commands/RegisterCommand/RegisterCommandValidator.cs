@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -31,7 +32,13 @@ public class RegisterCommandValidator(
         {
             throw new ApplicationExceptionBase("Email is required", HttpStatusCode.BadRequest);
         }
-
+        
+        var emailValidator = new EmailAddressAttribute();
+        if (!emailValidator.IsValid(request.Email))
+        {
+            throw new ApplicationExceptionBase("Email is invalid", HttpStatusCode.BadRequest);
+        }
+        
         if (string.IsNullOrWhiteSpace(request.Password))
         {
             throw new ApplicationExceptionBase("Password is required", HttpStatusCode.BadRequest);
