@@ -17,7 +17,7 @@ public class RegisterCommandValidator(
     ILogger<RegisterCommandValidator> logger)
     : IValidator<RegisterCommand, AuthResponse>
 {
-    private AuthOptions _authOptions = authOptions.Value;
+    private readonly AuthOptions _authOptions = authOptions.Value;
 
     public Priority Priority { get; set; } = Priority.ExecuteFirst;
 
@@ -42,6 +42,16 @@ public class RegisterCommandValidator(
         if (string.IsNullOrWhiteSpace(request.Password))
         {
             throw new ApplicationExceptionBase("Password is required", HttpStatusCode.BadRequest);
+        }
+
+        if (string.IsNullOrWhiteSpace(request.ConfirmPassword))
+        {
+            throw new ApplicationExceptionBase("Repeat Password is required", HttpStatusCode.BadRequest);
+        }
+
+        if (request.Password != request.ConfirmPassword)
+        {
+            throw new ApplicationExceptionBase("Passwords do not match", HttpStatusCode.BadRequest);
         }
 
         if (request.Password.Length < 6)
