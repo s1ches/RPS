@@ -16,6 +16,14 @@ const $usersApi = axios.create({
     validateStatus: status => true
 });
 
+const $gameApi = axios.create({
+    baseURL: process.env.REACT_APP_RPS_GAME_API,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    validateStatus: status => true
+});
+
 const addAuthToken = (config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -26,8 +34,10 @@ const addAuthToken = (config) => {
 
 $authApi.interceptors.request.use(addAuthToken);
 $usersApi.interceptors.request.use(addAuthToken);
+$gameApi.interceptors.request.use(addAuthToken);
 
 export {
     $authApi,
-    $usersApi
+    $usersApi,
+    $gameApi
 }

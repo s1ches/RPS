@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
@@ -11,6 +11,7 @@ import {getCurrentUser} from "./services/users";
 
 const App = () => {
     const {user, login} = useUserStore();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -22,11 +23,18 @@ const App = () => {
                 } else if (user) {
                     login(user);
                 } else {
-                    alert('Невозможно получить данные пользователя. Попробуйте позже.');
+                    alert('Время жизни токена истекло. Пожалуйста, войдите снова.');
                 }
+                setLoading(false);
             });
+        } else {
+            setLoading(false);
         }
     }, []);
+
+    if (loading) {
+        return <div>Загрузка...</div>;
+    }
 
     return (
         <BrowserRouter>
@@ -36,7 +44,8 @@ const App = () => {
                     <Route path="/" element={user.isAuth ? <HomePage/> : <Navigate to="/login" replace/>}/>
                     <Route path="/login" element={user.isAuth ? <Navigate to="/" replace/> : <LoginPage/>}/>
                     <Route path="/register" element={user.isAuth ? <Navigate to="/" replace/> : <RegisterPage/>}/>
-                    <Route path="/room/:id" element={user.isAuth ? <Navigate to="/" replace/> : <RoomPage/>}/>
+                    <Route path="/room/:roomId" element={user.isAuth ? <RoomPage /> : <Navigate to="/login" replace />}
+                    />
                 </Routes>
             </div>
         </BrowserRouter>

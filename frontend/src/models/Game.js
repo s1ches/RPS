@@ -1,74 +1,52 @@
-// models/Game.js
+import {GameStatus} from "./Shared/gameStatus";
 
 class Game {
-    constructor(id, roomId, player1, player2) {
-        this._id = id;
+    constructor({
+                    gameId,
+                    roomId,
+                    player1,
+                    player2,
+                    rounds = [],
+                    status = GameStatus.Started,
+                    winnerId = null,
+                    victories1 = 0,
+                    victories2 = 0,
+                }) {
+        this._gameId = gameId
         this._roomId = roomId;
-        this._player1 = player1; // ID игрока 1
-        this._player2 = player2; // ID игрока 2
-        this._rounds = []; // Список раундов
-        this._maxRating = 0;
-        this._status = 'Не начата'; // Статус игры (например, "Не начата", "Начата", "Закончена")
-        this._result = ''; // Результат игры (например, "Победа игрока 1", "Победа игрока 2", "Ничья")
-        this._winnerId = -1;
+        this._player1 = player1;
+        this._player2 = player2;
+        this._rounds = rounds;
+        this._status = status;
+        this._winnerId = winnerId;
+        this._victories1 = victories1;
+        this._victories2 = victories2;
     }
 
-    // Геттеры
-    get id() {
-        return this._id;
-    }
-
-    get roomId() {
-        return this._roomId;
-    }
-
-    get player1() {
-        return this._player1;
-    }
-
-    get player2() {
-        return this._player2;
-    }
-
-    get rounds() {
-        return this._rounds;
-    }
-
-    get status() {
-        return this._status;
-    }
-
-    get result() {
-        return this._result;
-    }
-
-    get maxRating() {
-        return this._maxRating
-    }
-
-    get winnerId() {
-        return this._winnerId;
-    }
-
-    // Добавление раунда
     addRound(roundResult) {
         this._rounds.push(roundResult);
     }
 
-    // Изменение статуса игры
-    startGame() {
-        this._status = 'Начата';
+    updateScore(winnerId) {
+        if (winnerId === this._player1) {
+            this._victories1 += 1;
+        } else if (winnerId === this._player2) {
+            this._victories2 += 1;
+        }
     }
 
-    endGame(result) {
-        this._status = 'Закончена';
-        this._result = result;
-    }
+    endGame() {
+        this._status = GameStatus.Ended;
 
-    // Проверка, завершена ли игра
-    isGameOver() {
-        return this._status === 'Закончена';
+        if (this._victories1 > this._victories2) {
+            this._winnerId = this._player1;
+        } else if (this._victories1 < this._victories2) {
+            this._winnerId = this._player2;
+        } else {
+            this._winnerId = null;
+        }
     }
 }
+
 
 export default Game;

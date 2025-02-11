@@ -1,23 +1,14 @@
-/* Основные стили для приложения */
 .App {
   font-family: 'Arial', sans-serif;
   text-align: center;
   display: flex;
-  min-height: 100vh;
-  background-color: #f0f8ff; /* Светлый фон */
+  background-color: #f0f8ff;
   color: #333;
+  flex-direction: column;
+  padding-top: 100px;
+  width: 100%;
 }
 
-/* Заголовок и стили для основной страницы */
-.App-header {
-  background-color: #282c34;
-  color: white;
-  padding: 20px;
-  font-size: 2rem;
-  text-align: center;
-}
-
-/* Главный контейнер для контента */
 main {
   flex: 1;
   display: flex;
@@ -26,7 +17,6 @@ main {
   padding: 20px;
 }
 
-/* Кнопки */
 button {
   padding: 10px 20px;
   font-size: 1rem;
@@ -39,21 +29,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Темнее при наведении */
-}
-
-/* Для компонент страницы */
-.page-wrapper {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.page-header {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: bold;
+  background-color: #0056b3;
 }
 
 input {
@@ -65,7 +41,7 @@ input {
 }
 
 input:focus {
-  border-color: #007bff; /* Синий для фокуса */
+  border-color: #007bff;
   outline: none;
 }
 
@@ -77,3 +53,25 @@ form {
 form button {
   margin-top: 20px;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

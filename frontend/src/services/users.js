@@ -20,13 +20,18 @@ export const getCurrentUser = async () => {
 };
 
 export const getUsers = async (userIds) => {
-    const response = await $usersApi.get('/users/users-infos', {userIds: userIds});
+    const response = await $usersApi.get('/users/users-infos', {
+        params: {
+            userIds: userIds
+        }
+    });
     if (response.status === 200) {
         return {
             users: response.data.users.map(user => ({
                 id: user.userId,
                 username: user.userName,
-                rating: user.rating
+                rating: user.rating,
+                status: user.status,
             })),
             error: null
         };

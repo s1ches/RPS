@@ -1,4 +1,3 @@
-/* Navbar стили */
 .navbar {
     background-color: #f3d1d1;
     color: white;
@@ -11,10 +10,9 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для Navbar */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Название игры */
 .navbar__title {
     font-size: 1.8rem;
     font-weight: bold;
@@ -22,7 +20,6 @@
     letter-spacing: 1px;
 }
 
-/* Стили для меню */
 .navbar ul {
     list-style-type: none;
     padding: 0;
@@ -34,7 +31,6 @@
     margin: 0 15px;
 }
 
-/* Стили для ссылок и кнопок */
 .navbar a, .navbar button {
     color: white;
     text-decoration: none;
@@ -44,12 +40,10 @@
     transition: background-color 0.3s;
 }
 
-/* Эффект при наведении */
 .navbar a:hover, .navbar button:hover {
     background-color: #444;
 }
 
-/* Информация о пользователе */
 .navbar__user-info {
     display: flex;
     gap: 15px;
@@ -62,9 +56,8 @@
     font-weight: bold;
 }
 
-/* Кнопка Выйти */
 .navbar button {
-    background-color: #c20d00; /* Красный цвет для кнопки Выйти */
+    background-color: #c20d00;
     border: none;
     cursor: pointer;
     transition: transform 0.3s, background-color 0.3s;
@@ -75,7 +68,6 @@
     transform: scale(1.05);
 }
 
-/* Добавление отступов для навигации */
 .navbar a {
     padding: 10px 20px;
     font-size: 1.2rem;

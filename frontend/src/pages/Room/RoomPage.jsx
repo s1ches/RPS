@@ -1,62 +1,122 @@
-const RoomPage = ({ userRating }) => {
-    // const { roomId } = useParams(); // Получаем id комнаты из URL
-    // const [room, setRoom] = useState(null);
-    // const [isJoined, setIsJoined] = useState(false);
-    // const [isCreator, setIsCreator] = useState(false);
-    // const [gameStarted, setGameStarted] = useState(false);
-    //
-    // useEffect(() => {
-    //     // Загружаем информацию о комнате
-    //     const fetchRoomDetails = async () => {
-    //         try {
-    //             const response = await api.get(`/rooms/${roomId}`); //TODO переделать
-    //             setRoom(response.data);
-    //             setIsCreator(response.data.creator === 'player');
-    //         } catch (error) {
-    //             console.error('Ошибка при загрузке данных комнаты', error);
-    //         }
-    //     };
-    //     fetchRoomDetails();
-    // }, [roomId]);
-    //
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import GameComponent from "../../components/Game/GameComponent/GameComponent";
+import {useUserStore} from "../../stores/userStore";
+import {RoomStatus} from "../../models/Shared/roomStatus";
+import './styles/RoomPage.css'
+import {getRoom, leaveRoom} from "../../services/room";
+import {useRoom} from "../../stores/roomStore";
+
+const RoomPage = () => {
+    const {roomId} = useParams();
+    const {user} = useUserStore();
+    const {room, setRoom, game, setGame} = useRoom();
+    const [gameStarted, setGameStarted] = useState(false);
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (room.player1 && room.player2 && room.status === RoomStatus.WaitingForPlayer) {
+            room.startGame();
+            setGameStarted(true);
+        }
+    }, [room, user]);
+
+    const joinGameOnClick = () => {
+        if (room && user) {
+            if (room.status !== RoomStatus.WaitingForPlayer) {
+                alert("Игра уже началась.");
+            } else if (user.rating > room.maxRating) {
+                alert("Ваш рейтинг слишком высок для этой комнаты.");
+            } else if (room.player1 && room.player2) {
+                alert("В комнате уже два игрока, невозможно присоединиться.");
+            } else {
+                if (room.player1 && room.player2) {
+                    room.startGame();
+                    setGameStarted(true);
+                }
+            }
+        }
+    };
+
+    const leaveRoomOnClick = () => {
+        if (room && user) {
+            if (room.player1 === user.id || room.player2 === user.id) {
+                if (!gameStarted) {
+                    leaveRoom(room.roomId).then(() => navigate('/'))
+                } else {
+                    alert("Вы не можете выйти из комнаты, пока игра не завершена.");
+                }
+            } else {
+                leaveRoom(room.roomId).then(() => navigate('/'))
+            }
+        }
+    };
+
+    useEffect(() => {
+        const fetchRoomDetails = async () => {
+                getRoom(roomId).then(({room, error}) => {
+                    if(error) {
+                        console.log(error);
+                        alert(error);
+                    }
+                    else{
+                        setRoom(room);
+                    }
+            });
+        };
+        fetchRoomDetails();
+    }, []);
+
     // const joinRoom = () => {
     //     if (userRating >= room.minRating && userRating <= room.maxRating) {
     //         setIsJoined(true);
-    //         api.post(`/rooms/${roomId}/join`, { user: 'player' }); //TODO переделать
+    //         $gameApi.post(`/rooms/${roomId}/join`, { user: 'player' });
     //     } else {
     //         alert('Ваш рейтинг не соответствует требованиям для этой комнаты');
     //     }
     // };
-    //
-    // const startGame = () => {
-    //     // Логика запуска игры
-    //     setGameStarted(true);
-    //     api.post(`/rooms/${roomId}/start`); //TODO переделать
-    // };
-    //
-    // return (
-    //     <div>
-    //         <h1>Комната {roomId}</h1>
-    //         {room && (
-    //             <>
-    //                 <p>Создатель: {room.creator}</p>
-    //                 <p>Минимальный рейтинг: {room.minRating}</p>
-    //                 <p>Максимальный рейтинг: {room.maxRating}</p>
-    //                 <p>Игроки: {room.players.join(', ')}</p>
-    //
-    //                 {isCreator && !gameStarted && (
-    //                     <button onClick={startGame}>Начать игру</button>
-    //                 )}
-    //
-    //                 {!isJoined && !gameStarted && (
-    //                     <button onClick={joinRoom}>Присоединиться</button>
-    //                 )}
-    //
-    //                 {gameStarted && <GameComponent roomId={roomId} />}
-    //             </>
-    //         )}
-    //     </div>
-    // );
+
+    return (
+        <div className="game-room-container">
+            <h1 className="room-header">Комната {room.roomId}</h1>
+
+            <div className="room-info">
+                <p><strong>Максимальный рейтинг:</strong> {room.maxRating}</p>
+                <p>
+                    <strong>Игроки:</strong> {room.player1 ? room.player1 : 'Нет игрока 1'}, {room.player2 ? room.player2 : 'Нет игрока 2'}
+                </p>
+            </div>
+
+            <div className="room-buttons">
+                {(
+                    !gameStarted) &&
+                    (
+                    <button onClick={joinGameOnClick}>Присоединиться</button>
+                )}
+                {(
+                    <button onClick={leaveRoomOnClick}>Выйти из комнаты</button>
+                )}
+            </div>
+
+            {room.spectators.length > 0 && (
+                <div className="spectators-list">
+                    <h3>Зрители</h3>
+                    <ul>
+                        {room.spectators.map((spectator, index) => (
+                            <li key={index}>{spectator}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {gameStarted && (
+                <div className="game-field">
+                    <h2>Игра началась!</h2>
+                    <GameComponent room={room} game={game}/>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default RoomPage;

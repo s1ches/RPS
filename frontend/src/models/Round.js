@@ -1,39 +1,32 @@
-// models/Round.js
+import {GameStatus} from "./Shared/gameStatus";
+import {PlayerChoice} from "./Shared/playerChoice";
 
 class Round {
     constructor(roundId, gameId, player1Id, player2Id, player1Choice, player2Choice, winnerId) {
-        this._roundId = roundId; // ID раунда
+        this._roundId = roundId;
         this._gameId = gameId
-        this._player1Id = player1Id; // ID игрока 1
-        this._player2Id = player2Id; // ID игрока 2
-        this._player1Choice = player1Choice; // Выбор игрока 1 (камень, ножницы, бумага)
-        this._player2Choice = player2Choice; // Выбор игрока 2 (камень, ножницы, бумага)
-        this._winnerId = winnerId; // Результат раунда (например, "Игрок 1 победил", "Ничья", "Игрок 2 победил")
+        this._status = GameStatus.Started;
+        this._player1Id = player1Id;
+        this._player2Id = player2Id;
+        this._player1Choice = player1Choice;
+        this._player2Choice = player2Choice;
+        this._winnerId = winnerId;
     }
 
-    // Геттеры
-    get roundId() {
-        return this._roundId;
-    }
+    determineWinner() {
+        if (this._player1Choice === this._player2Choice) {
+            this._winnerId = null;
+        } else if (
+            (this._player1Choice === PlayerChoice.Rock && this._player2Choice === PlayerChoice.Scissors) ||
+            (this._player1Choice === PlayerChoice.Scissors && this._player2Choice === PlayerChoice.Paper) ||
+            (this._player1Choice === PlayerChoice.Paper && this._player2Choice === PlayerChoice.Rock)
+        ) {
+            this._winnerId = this._player1Id;
+        } else {
+            this._winnerId = this._player2Id;
+        }
 
-    get player1Id() {
-        return this._player1Id;
-    }
-
-    get player2Id() {
-        return this._player2Id;
-    }
-
-    get player1Choice() {
-        return this._player1Choice;
-    }
-
-    get player2Choice() {
-        return this._player2Choice;
-    }
-
-    get winnerId() {
-        return this._winnerId;
+        this._status = GameStatus.Ended;
     }
 }
 
