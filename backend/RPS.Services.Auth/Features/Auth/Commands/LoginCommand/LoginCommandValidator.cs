@@ -1,5 +1,4 @@
 using System.Net;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RPS.Common.Exceptions;
 using RPS.Common.MediatR.ModelsAbstractions;
@@ -10,7 +9,7 @@ using RPS.Services.Auth.Domain.QueriesExtensions;
 using RPS.Services.Auth.Requests.Auth;
 using RPS.Services.Auth.Services.PasswordHasher;
 
-namespace RPS.Services.Auth.Features.Commands.LoginCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.LoginCommand;
 
 public class LoginCommandValidator(
     AuthDbContext dbContext,
@@ -31,7 +30,7 @@ public class LoginCommandValidator(
         if (string.IsNullOrWhiteSpace(request.Password))
             throw new ApplicationExceptionBase("Password is required", HttpStatusCode.BadRequest);
 
-        if (request.Password.Length < 6)
+        if (request.Password.Length < _authOptions.MinimumPasswordLength)
             throw new ApplicationExceptionBase(
                 $"Password must be at least {_authOptions.MinimumPasswordLength} characters long",
                 HttpStatusCode.BadRequest);

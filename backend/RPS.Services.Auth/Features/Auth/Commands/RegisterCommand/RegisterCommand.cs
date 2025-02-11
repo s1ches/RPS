@@ -2,7 +2,7 @@ using RPS.Common.MediatR.ModelsAbstractions;
 using RPS.Services.Auth.Requests.Auth;
 using RPS.Services.Auth.Requests.Auth.Register;
 
-namespace RPS.Services.Auth.Features.Commands.RegisterCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.RegisterCommand;
 
 public class RegisterCommand : IRequest<AuthResponse>
 {

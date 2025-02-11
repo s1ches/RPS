@@ -9,7 +9,7 @@ using RPS.Common.Options;
 using RPS.Services.Auth.Data;
 using RPS.Services.Auth.Requests.Auth;
 
-namespace RPS.Services.Auth.Features.Commands.RegisterCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.RegisterCommand;
 
 public class RegisterCommandValidator(
     IOptions<AuthOptions> authOptions,
@@ -54,7 +54,7 @@ public class RegisterCommandValidator(
             throw new ApplicationExceptionBase("Passwords do not match", HttpStatusCode.BadRequest);
         }
 
-        if (request.Password.Length < 6)
+        if (request.Password.Length < _authOptions.MinimumPasswordLength)
         {
             throw new ApplicationExceptionBase(
                 $"Password must be at least {_authOptions.MinimumPasswordLength} characters",

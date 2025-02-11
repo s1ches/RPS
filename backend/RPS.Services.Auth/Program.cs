@@ -1,3 +1,4 @@
+using MassTransit;
 using RPS.Common.Configuration;
 using RPS.Common.Extensions;
 using RPS.Common.MediatR;
@@ -5,6 +6,7 @@ using RPS.Common.Middlewares;
 using RPS.Common.Options;
 using RPS.Services.Auth.Data;
 using RPS.Services.Auth.Services.ClaimsProvider;
+using RPS.Services.Auth.Services.MasstransitService;
 using RPS.Services.Auth.Services.PasswordHasher;
 using RPS.Services.Auth.Services.TokenProvider;
 
@@ -33,6 +35,7 @@ builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddScoped<IClaimsManager, ClaimsManager>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+// builder.Services.AddScoped<IRegistrationEventSender, RegistrationEventSender>();
 #endregion
 
 #region CORS configuration
@@ -42,6 +45,25 @@ builder.Services.AddCors(corsOptions);
 builder.Services.Configure<CorsOptions>(builder.Configuration.GetSection(nameof(CorsOptions)));
 #endregion
 
+#region Masstransit Configuration
+// var rabbitMqOptions = new RabbitMqOptions();
+// builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
+// builder.Services.AddMassTransit(x =>
+// {
+//     x.AddEntityFrameworkOutbox<AuthDbContext>(o =>
+//     {
+//         o.UsePostgres();
+//         o.UseBusOutbox();
+//     });
+//
+//     x.UsingRabbitMq((_, cfg) =>
+//     {
+//         cfg.Host(rabbitMqOptions.Host);
+//         cfg.AutoStart = true;
+//     });
+// });
+#endregion
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -49,10 +71,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(CorsOptions.CorsPolicyName);
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
