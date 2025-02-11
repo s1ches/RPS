@@ -1,5 +1,4 @@
 using System.Net;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RPS.Common.Exceptions;
 using RPS.Common.MediatR.ModelsAbstractions;
@@ -10,7 +9,7 @@ using RPS.Services.Auth.Domain.QueriesExtensions;
 using RPS.Services.Auth.Requests.Auth;
 using RPS.Services.Auth.Services.PasswordHasher;
 
-namespace RPS.Services.Auth.Features.Commands.LoginCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.LoginCommand;
 
 public class LoginCommandValidator(
     AuthDbContext dbContext,

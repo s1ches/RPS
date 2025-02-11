@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RPS.Services.Auth.Data.EntitiesConfigurations;
 using RPS.Services.Auth.Domain.Entities;
@@ -19,6 +20,7 @@ public class AuthDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+        
         base.OnModelCreating(modelBuilder);
     }
 }

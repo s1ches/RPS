@@ -9,7 +9,7 @@ using RPS.Common.Options;
 using RPS.Services.Auth.Data;
 using RPS.Services.Auth.Requests.Auth;
 
-namespace RPS.Services.Auth.Features.Commands.RegisterCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.RegisterCommand;
 
 public class RegisterCommandValidator(
     IOptions<AuthOptions> authOptions,

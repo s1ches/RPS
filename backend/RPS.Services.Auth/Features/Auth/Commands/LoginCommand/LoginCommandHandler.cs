@@ -5,7 +5,7 @@ using RPS.Services.Auth.Domain.QueriesExtensions;
 using RPS.Services.Auth.Requests.Auth;
 using RPS.Services.Auth.Services.TokenProvider;
 
-namespace RPS.Services.Auth.Features.Commands.LoginCommand;
+namespace RPS.Services.Auth.Features.Auth.Commands.LoginCommand;
 
 public class LoginCommandHandler(
     ILogger<LoginCommandHandler> logger,
