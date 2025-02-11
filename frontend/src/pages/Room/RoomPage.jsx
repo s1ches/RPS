@@ -14,9 +14,9 @@ const RoomPage = ({ userRating }) => {
         // Загружаем информацию о комнате
         const fetchRoomDetails = async () => {
             try {
-                const response = await api.get(`/rooms/${roomId}`);
+                const response = await api.get(`/rooms/${roomId}`); //TODO переделать
                 setRoom(response.data);
-                setIsCreator(response.data.creator === 'player'); // Логика определения создателя комнаты
+                setIsCreator(response.data.creator === 'player');
             } catch (error) {
                 console.error('Ошибка при загрузке данных комнаты', error);
             }
@@ -27,8 +27,7 @@ const RoomPage = ({ userRating }) => {
     const joinRoom = () => {
         if (userRating >= room.minRating && userRating <= room.maxRating) {
             setIsJoined(true);
-            // Присоединение игрока к комнате через API
-            api.post(`/rooms/${roomId}/join`, { user: 'player' });
+            api.post(`/rooms/${roomId}/join`, { user: 'player' }); //TODO переделать
         } else {
             alert('Ваш рейтинг не соответствует требованиям для этой комнаты');
         }
@@ -37,7 +36,7 @@ const RoomPage = ({ userRating }) => {
     const startGame = () => {
         // Логика запуска игры
         setGameStarted(true);
-        api.post(`/rooms/${roomId}/start`);
+        api.post(`/rooms/${roomId}/start`); //TODO переделать
     };
 
     return (

@@ -8,7 +8,7 @@ const GameComponent = ({ roomId }) => {
     useEffect(() => {
         const fetchGameData = async () => {
             try {
-                const response = await api.get(`/games/${roomId}`);
+                const response = await api.get(`/rooms/${roomId}`);
                 setGameData(response.data);
             } catch (error) {
                 console.error('Ошибка при загрузке данных игры', error);

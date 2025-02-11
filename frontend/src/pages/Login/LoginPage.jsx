@@ -5,33 +5,37 @@ import { useUserStore } from '../../stores/userStore';
 import './styles/LoginPage.css'
 
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useUserStore();
 
-    const handleLogin = async (e) => {
+    let handleLogin = (e) => {
         e.preventDefault();
-        try {
-            const user = await loginUser(username, password);
-            login(user); // Обновляем состояние пользователя
-            localStorage.setItem('token', 'fake-jwt-token'); // TODO, замени на реальный токен
-            navigate('/'); // Перенаправляем на главную страницу
-        } catch (error) {
-            alert('Ошибка при входе: ' + error.message);
-        }
+        loginUser(email, password)
+            .then(({ user, error }) => {
+                if (error) {
+                    console.log(error)
+                    alert(error);
+                } else if (user) {
+                    login(user);
+                    navigate('/');
+                } else {
+                    alert('Невозможно авторизоваться. Попробуйте позже.');
+                }
+            });
     };
 
     return (
         <div className="loginPage__container">
             <h2 className="loginPage__header">Авторизация</h2>
-            <form className="loginPage__form" onSubmit={handleLogin}>
+            <form className="loginPage__form" onSubmit={e => handleLogin(e)}>
                 <input
                     className="loginPage__input"
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                 />
                 <input

@@ -1,19 +1,8 @@
-import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useUserStore} from '../../stores/userStore';
+import React from 'react';
 import './styles/HomePage.css'
 import RoomList from "../../components/Game/RoomList/RoomList";
 
 const HomePage = () => {
-    let {isAuth} = useUserStore();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!isAuth) {
-            isAuth = true;
-            // navigate('/login');
-        }
-    }, [isAuth]); // Добавляем зависимости
 
     return (
         <div>

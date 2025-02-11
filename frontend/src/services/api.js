@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: process.env.VITE_RPS_API_URL || 'http://localhost:5000/api',
+    baseURL: process.env.REACT_APP_RPS_API,
     headers: {
         'Content-Type': 'application/json',
     },
+    validateStatus: status => true
 });
 
-// Добавляем токен в каждый запрос
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -15,15 +15,3 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
-
-// Обработка ошибок
-api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem('token');
-            window.location.href = '/login'; // Перенаправление на страницу входа
-        }
-        return Promise.reject(error);
-    }
-);

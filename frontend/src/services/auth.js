@@ -1,48 +1,43 @@
-import { api } from './api';  // axios-экземпляр для запросов
+import {api} from './api';
+import User from "../models/User";
 
-// Регистрация пользователя
-export const registerUser = async (username, password) => {
-    try {
-        const response = await api.post('/auth/register', { username, password });
-        return response.data;  // Возвращаем данные пользователя или токен
-    } catch (error) {
-        console.error('Ошибка регистрации:', error.response?.data?.message || error.message);
-        return { error: 'Ошибка при регистрации' };  // Возвращаем ошибку, а не выбрасываем исключение
+export const registerUser = async (username, email, password, confirmPassword) => {
+    const response = await api.post('/auth/register', {username, email, password, confirmPassword});
+    if (response.status === 200) {
+        const token = response.data;
+        localStorage.setItem('token', token);
+        //TODO запрос на юзера
+        return {user: new User('1', 'fuzikort', 0, true), error: null};
+    } else {
+        return {user: null, error: response.data.Message};
     }
 };
 
-// Логин пользователя
-export const loginUser = async (username, password) => {
-    try {
-        const response = await api.post('/auth/login', { username, password });
-        const { token, user } = response.data;  // Получаем токен и данные пользователя
-        localStorage.setItem('token', token);  // Сохраняем токен в localStorage
-        return { user };  // Возвращаем данные пользователя
-    } catch (error) {
-        console.error('Ошибка авторизации:', error.response?.data?.message || error.message);
-        return { error: 'Ошибка при авторизации' };  // Возвращаем ошибку
+export const loginUser = async (email, password) => {
+    const response = await api.post('/auth/login', {email, password});
+    if (response.status === 200) {
+        const token = response.data;
+        localStorage.setItem('token', token);
+        //TODO запрос на юзера
+        return {user: new User('1', 'fuzikort', 0, true), error: null};
+    } else {
+        return {user: null, error: response.data.Message};
     }
 };
 
-// Получение информации о текущем пользователе (можно использовать для верификации токена)
 export const getCurrentUser = async () => {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
-            return { error: 'Токен не найден' };  // Возвращаем ошибку, если токен отсутствует
+            return {error: 'Токен не найден'};
         }
 
-        const response = await api.get('/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await api.get('/auth/me', { //TODO переделать
+            headers: {Authorization: `Bearer ${token}`}
         });
-        return response.data;  // Возвращаем информацию о текущем пользователе
+        return response.data;
     } catch (error) {
         console.error('Ошибка при получении данных пользователя:', error.response?.data?.message || error.message);
-        return { error: 'Ошибка при получении данных пользователя' };  // Возвращаем ошибку
+        return {error: 'Ошибка при получении данных пользователя'};
     }
-};
-
-// Логика выхода пользователя
-export const logoutUser = () => {
-    localStorage.removeItem('token');  // Удаляем токен из localStorage
 };
