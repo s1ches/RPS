@@ -42,6 +42,7 @@ public class RoomHub(
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
         
         dbContext.Participants.Remove(participant);
+        await dbContext.SaveChangesAsync();
         
         var userId = claimsProvider.GetUserId(Context.User!);
         await updateUserStatusEventSender.SendEventAsync(userId, UserStatus.Offline);
