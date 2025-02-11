@@ -33,7 +33,7 @@ public class RegisterCommandHandler(
         var entry = await dbContext.Users.AddAsync(user, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         
-        await registrationEventSender.SendRegistrationEventAsync(entry.Entity, cancellationToken);
+        await registrationEventSender.SendEventAsync(entry.Entity, cancellationToken);
         
         logger.LogInformation("User with {email} registered and logged in", user.Email);
         

@@ -10,6 +10,6 @@ public static class MediatrExtensions
     {
         return services
             .RegisterPipelineFromAssembly(assembly)
-            .AddScoped<IMediatr, Mediatr>();
+            .AddScoped<IMediator, Mediator>();
     }
 }

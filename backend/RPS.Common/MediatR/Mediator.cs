@@ -4,7 +4,7 @@ using RPS.Common.MediatR.ModelsAbstractions;
 
 namespace RPS.Common.MediatR;
 
-public class Mediatr(IServiceScopeFactory serviceScopeFactory) : IMediatr
+public class Mediator(IServiceScopeFactory serviceScopeFactory) : IMediator
 {
     public async Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request,
         CancellationToken cancellationToken = default)

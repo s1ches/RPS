@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using RPS.Common.Domain.Interfaces;
 
 namespace RPS.Common.Domain.Abstractions;
