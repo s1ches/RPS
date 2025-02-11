@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { api } from '../../../services/api';
-import RoomCard from '../RoomCard';
-import Room from "../../../models/Room"; // Компонент для отображения комнаты
 import './styles/RoomList.css'
+import {useCallback, useEffect, useState} from "react";
+import Room from "../../../models/Room";
+import RoomCard from "../RoomCard/RoomCard";
 
-const RoomList = ({ isAuth, limit = 5 }) => {
+const RoomList = () => {
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(false);
     const [offset, setOffset] = useState(0);
     const [totalRooms, setTotalRooms] = useState(0);
+    const limit = 10;
 
-    // Моковые данные должны быть загружены только один раз
     useEffect(() => {
         const mockRooms = [
             new Room('room-001'),
@@ -130,7 +129,7 @@ const RoomList = ({ isAuth, limit = 5 }) => {
         if (bottom && !loading && offset + limit < totalRooms) {
             setOffset((prevOffset) => prevOffset + limit);  // Переход к следующей порции данных
         }
-    }, [loading, offset, limit, totalRooms]);
+    }, [loading, offset, totalRooms]);
 
     // useEffect(() => {
     //     if (isAuth) {

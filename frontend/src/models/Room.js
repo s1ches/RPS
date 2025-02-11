@@ -7,7 +7,7 @@ class Room {
         this.player2 = null;  // Два игрока
         this.spectators = [];  // Список зрителей
         this.rounds = [];  // История раундов
-        this.status = 'Ожидает игроков';  // Статус комнаты
+        this.status = 'Ожидает игроков';
         this.result = '';  // Результат игры
     }
 

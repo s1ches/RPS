@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/HomePage.css'
-import RoomList from "../../components/Game/RoomList/RoomList";
+import RoomList from "../../components/Room/RoomList/RoomList";
 
 const HomePage = () => {
 

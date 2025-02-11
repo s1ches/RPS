@@ -7,8 +7,10 @@ class Game {
         this._player1 = player1; // ID игрока 1
         this._player2 = player2; // ID игрока 2
         this._rounds = []; // Список раундов
+        this._maxRating = 0;
         this._status = 'Не начата'; // Статус игры (например, "Не начата", "Начата", "Закончена")
         this._result = ''; // Результат игры (например, "Победа игрока 1", "Победа игрока 2", "Ничья")
+        this._winnerId = -1;
     }
 
     // Геттеры
@@ -38,6 +40,14 @@ class Game {
 
     get result() {
         return this._result;
+    }
+
+    get maxRating() {
+        return this._maxRating
+    }
+
+    get winnerId() {
+        return this._winnerId;
     }
 
     // Добавление раунда
