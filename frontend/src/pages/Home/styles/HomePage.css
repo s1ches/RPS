@@ -1,6 +1,7 @@
 .room-list-container {
     padding: 20px;
     text-align: center;
+    justify-content: center;
     display: flex;
     flex-direction: column;
 }
@@ -12,7 +13,6 @@
 
 .room-list-container .rooms {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     justify-items: center;
 }
@@ -64,3 +64,26 @@
     color: #888;
     margin-top: 20px;
 }
+
+.create-room input {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.create-room button {
+    font-size: 16px;
+    background-color: #3da642;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-room button:hover {
+    background-color: #45a049;
+}
+

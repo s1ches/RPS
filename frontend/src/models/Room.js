@@ -1,68 +1,66 @@
-// models/Room.js
+import {RoomStatus} from "./Shared/roomStatus";
 
 class Room {
-    constructor(roomId) {
-        this.roomId = roomId;  // Идентификатор комнаты
-        this.player1 = null; // Два игрока
-        this.player2 = null;  // Два игрока
-        this.spectators = [];  // Список зрителей
-        this.rounds = [];  // История раундов
-        this.status = 'Ожидает игроков';
-        this.result = '';  // Результат игры
+    constructor({
+                    roomId,
+                    player1 = null,
+                    player2 = null,
+                    maxRating = 0,
+                    status = RoomStatus.WaitingForPlayer,
+                    spectators = [],
+                    games = [],
+                    lastActivityTime = Date.now()
+                }) {
+        this.roomId = roomId;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.maxRating = maxRating;
+        this.status = status;
+        this.spectators = spectators;
+        this.games = games;
+        this.lastActivityTime = lastActivityTime;
     }
 
-    // Установить игрока
     addPlayer(playerId) {
         if (this.player1 === null) {
             this.player1 = playerId;
         } else if (this.player2 === null) {
             this.player2 = playerId;
         }
+
+        this.lastActivityTime = Date.now();
     }
 
-    // Добавить зрителя
-    addSpectator(spectatorId) {
-        if (this.spectators.length < 10) {  // Ограничение на количество зрителей
-            this.spectators.push(spectatorId);
-        } else {
-            console.log("В комнате уже слишком много зрителей");
+    leavePlayer(playerId) {
+        if (this.player1 === playerId) {
+            this.player1 = null;
+        } else if (this.player2 === playerId) {
+            this.player2 = null;
         }
+        this.lastActivityTime = Date.now();
     }
 
-    // Добавить раунд
-    addRound(roundResult) {
-        this.rounds.push(roundResult);
+    addSpectator(spectatorId) {
+        this.spectators.push(spectatorId);
+        this.lastActivityTime = Date.now();
     }
 
-    // Изменить статус на "Игра началась"
+    leaveSpectator(spectatorId) {
+        const index = this.spectators.indexOf(spectatorId);
+        if (index !== -1) {
+            this.spectators.splice(index, 1);
+            this.lastActivityTime = Date.now();
+        }
+    };
+
     startGame() {
-        if (this.players.player1 && this.players.player2) {
-            this.status = 'Игра началась';
+        if (this.player1 && this.player2) {
+            this.status = RoomStatus.WaitingForPlayer;
         } else {
             console.log("Невозможно начать игру, необходимо два игрока");
         }
     }
-
-    // Завершить игру и задать результат
-    endGame(result) {
-        this.status = 'Игра завершена';
-        this.result = result;
-    }
-
-    // Проверка, можно ли начать игру
-    canStartGame() {
-        return this.players.player1 && this.players.player2 && this.status === 'Ожидает начала игры';
-    }
-
-    // Проверка на доступность присоединения
-    canJoinGame() {
-        if (this.status === 'Игра началась') {
-            return this.spectators.length < 10; // Можно быть зрителем, если игра началась
-        } else if (this.status === 'Ожидает игроков' && (this.players.player1 === null || this.players.player2 === null)) {
-            return true;  // Можно присоединиться, если есть свободные места
-        }
-        return false;
-    }
 }
+
 
 export default Room;
