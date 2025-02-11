@@ -1,13 +1,15 @@
 using MassTransit;
 using RPS.Common.Configuration;
 using RPS.Common.Extensions;
+using RPS.Common.Masstransit.Constansts;
+using RPS.Common.Masstransit.Events;
 using RPS.Common.MediatR;
 using RPS.Common.Middlewares;
 using RPS.Common.Options;
 using RPS.Services.Auth.Data;
 using RPS.Services.Auth.Services.ClaimsProvider;
-using RPS.Services.Auth.Services.MasstransitService;
 using RPS.Services.Auth.Services.PasswordHasher;
+using RPS.Services.Auth.Services.RegistrationEventSender;
 using RPS.Services.Auth.Services.TokenProvider;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +37,7 @@ builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddScoped<IClaimsManager, ClaimsManager>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-// builder.Services.AddScoped<IRegistrationEventSender, RegistrationEventSender>();
+builder.Services.AddScoped<IRegistrationEventSender, RegistrationEventSender>();
 #endregion
 
 #region CORS configuration
@@ -46,22 +48,23 @@ builder.Services.Configure<CorsOptions>(builder.Configuration.GetSection(nameof(
 #endregion
 
 #region Masstransit Configuration
-// var rabbitMqOptions = new RabbitMqOptions();
-// builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
-// builder.Services.AddMassTransit(x =>
-// {
-//     x.AddEntityFrameworkOutbox<AuthDbContext>(o =>
-//     {
-//         o.UsePostgres();
-//         o.UseBusOutbox();
-//     });
-//
-//     x.UsingRabbitMq((_, cfg) =>
-//     {
-//         cfg.Host(rabbitMqOptions.Host);
-//         cfg.AutoStart = true;
-//     });
-// });
+var rabbitMqOptions = new RabbitMqOptions();
+builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Publish<RegistrationEvent>(p =>
+        {
+            p.ExchangeType = RabbitMqConstants.DirectExchangeType;
+            p.Durable = true;
+        });
+        
+        cfg.Host($"rabbitmq://{rabbitMqOptions.Host}");
+        cfg.ExchangeType = RabbitMqConstants.DirectExchangeType;
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
 #endregion
 
 var app = builder.Build();

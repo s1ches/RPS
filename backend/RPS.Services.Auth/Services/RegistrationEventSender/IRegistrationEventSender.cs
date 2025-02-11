@@ -1,6 +1,6 @@
 using RPS.Services.Auth.Domain.Entities;
 
-namespace RPS.Services.Auth.Services.MasstransitService;
+namespace RPS.Services.Auth.Services.RegistrationEventSender;
 
 public interface IRegistrationEventSender
 {

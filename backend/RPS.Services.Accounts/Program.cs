@@ -1,5 +1,7 @@
 using MassTransit;
 using RPS.Common.Configuration;
+using RPS.Common.Masstransit.Constansts;
+using RPS.Common.Masstransit.Events;
 using RPS.Common.MediatR;
 using RPS.Common.Middlewares;
 using RPS.Common.Options;
@@ -8,10 +10,9 @@ using RPS.Services.Accounts.Masstransit.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddConfiguredSwaggerGen();
 
 #region Auth Configuration
 var jwtOptions = new JwtOptions();
@@ -30,11 +31,32 @@ builder.Services.AddMediatR(typeof(Program).Assembly);
 #endregion
 
 #region Masstransit Configuration
-// builder.Services.AddMassTransit(cfg =>
-// {
-//     cfg.SetKebabCaseEndpointNameFormatter();
-//     cfg.AddConsumer<RegistrationConsumer>();
-// });
+var rabbitMqOptions = new RabbitMqOptions();
+builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<RegistrationConsumer>();
+    
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host($"rabbitmq://{rabbitMqOptions.Host}");
+
+        cfg.ReceiveEndpoint(RabbitMqConstants.RegistrationEventsQueueName, e =>
+        { 
+            e.ConfigureConsumeTopology = false;
+            e.ConfigureConsumer<RegistrationConsumer>(ctx);
+
+            e.Bind<RegistrationEvent>(exchange =>
+            {
+                exchange.Durable = true;
+                exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
+                exchange.RoutingKey = RabbitMqConstants.RegistrationEventsRoutingKey;
+            });
+        });
+        
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
 #endregion
 
 #region CORS configuration
