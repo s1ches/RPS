@@ -10,17 +10,17 @@ namespace RPS.Services.Auth.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IMediatr mediatr) : ControllerBase
+public class AuthController(IMediator mediator) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<AuthResponse> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        return await mediatr.SendAsync<LoginCommand, AuthResponse>(new LoginCommand(request), cancellationToken);
+        return await mediator.SendAsync<LoginCommand, AuthResponse>(new LoginCommand(request), cancellationToken);
     }
 
     [HttpPost("register")]
     public async Task<AuthResponse> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
-        return await mediatr.SendAsync<RegisterCommand, AuthResponse>(new RegisterCommand(request), cancellationToken);
+        return await mediator.SendAsync<RegisterCommand, AuthResponse>(new RegisterCommand(request), cancellationToken);
     }
 }

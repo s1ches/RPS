@@ -3,6 +3,7 @@ using RPS.Common.Configuration;
 using RPS.Common.Extensions;
 using RPS.Common.Grpc;
 using RPS.Common.Grpc.Clients;
+using RPS.Common.Grpc.Clients.Accounts;
 using RPS.Common.Grpc.Options;
 using RPS.Common.Masstransit.Constansts;
 using RPS.Common.Masstransit.Events;
@@ -12,17 +13,15 @@ using RPS.Common.Options;
 using RPS.Common.Options.KestrelOptions;
 using RPS.Common.Services.ClaimsProvider;
 using RPS.Services.Game.Data;
-using RPS.Services.Game.Hubs;
 using RPS.Services.Game.Hubs.Room;
 using RPS.Services.Game.Services.UpdateUserRatingEventSender;
 using RPS.Services.Game.Services.UpdateUserStatusEventSender;
+using DbContextOptions = RPS.Common.Options.DbContextOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddConfiguredSwaggerGen();
 
@@ -86,6 +85,7 @@ builder.WebHost.ConfigureKestrel(kestrelOptions);
 var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;
 var accountsUri = grpcOptions.Services.Single(x => x.ServiceName == "Accounts").Uri;
 builder.Services.AddGrpcClientService<AccountsService.AccountsServiceClient>(accountsUri);
+builder.Services.AddScoped<IAccountsClient, AccountsClient>();
 #endregion
 
 var app = builder.Build();
