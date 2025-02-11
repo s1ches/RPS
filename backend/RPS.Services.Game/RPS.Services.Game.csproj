@@ -19,6 +19,15 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+      <Folder Include="Data\" />
+      <Folder Include="Entities\" />
+      <Folder Include="Features\" />
+      <Folder Include="Requests\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RPS.Common\RPS.Common.csproj" />
     </ItemGroup>
 
 </Project>
