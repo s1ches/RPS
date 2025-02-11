@@ -1,14 +1,14 @@
-/* Основные стили для приложения */
 .App {
   font-family: 'Arial', sans-serif;
   text-align: center;
   display: flex;
   min-height: 100vh;
-  background-color: #f0f8ff; /* Светлый фон */
+  background-color: #f0f8ff;
   color: #333;
+  flex-direction: column;
+  padding-top: 60px;
 }
 
-/* Заголовок и стили для основной страницы */
 .App-header {
   background-color: #282c34;
   color: white;
@@ -17,7 +17,6 @@
   text-align: center;
 }
 
-/* Главный контейнер для контента */
 main {
   flex: 1;
   display: flex;
@@ -26,7 +25,6 @@ main {
   padding: 20px;
 }
 
-/* Кнопки */
 button {
   padding: 10px 20px;
   font-size: 1rem;
@@ -39,10 +37,9 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Темнее при наведении */
+  background-color: #0056b3;
 }
 
-/* Для компонент страницы */
 .page-wrapper {
   max-width: 600px;
   margin: 0 auto;
@@ -65,7 +62,7 @@ input {
 }
 
 input:focus {
-  border-color: #007bff; /* Синий для фокуса */
+  border-color: #007bff;
   outline: none;
 }
 
