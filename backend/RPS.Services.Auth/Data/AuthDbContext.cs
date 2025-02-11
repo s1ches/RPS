@@ -21,10 +21,6 @@ public class AuthDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         
-        modelBuilder.AddInboxStateEntity();
-        modelBuilder.AddOutboxMessageEntity();
-        modelBuilder.AddOutboxStateEntity();
-        
         base.OnModelCreating(modelBuilder);
     }
 }
