@@ -4,6 +4,7 @@ using RPS.Common.Grpc.Clients.Accounts;
 using RPS.Common.MediatR.ModelsAbstractions;
 using RPS.Common.MediatR.PipelineItems;
 using RPS.Services.Game.Data;
+using RPS.Services.Game.Domain.Enums;
 using RPS.Services.Game.Hubs.Room;
 using RPS.Services.Game.Services.UpdateUserStatusEventSender;
 
@@ -23,8 +24,28 @@ public class JoinGameCommandHandler(
         var room = await dbContext.Rooms
             .Include(x => x.Games)
             .SingleAsync(x => x.Id == request.RoomId, cancellationToken);
+
+        var game = room.Games
+            .Where(x => x.Status == GameStatus.WaitingForPlayer)
+            .OrderByDescending(x => x.CreateDate)
+            .FirstOrDefault();
+
+        // if (game == null)
+        // {
+        //     game = new Domain.Entities.Game
+        //     {
+        //         CreateDate = DateTime.UtcNow,
+        //         Status = GameStatus.WaitingForPlayer,
+        //         Player1Id = request.UserId,
+        //         GameChanges = [new ]
+        //     }
+        // }
+        // else
+        // {
+        //     game.Status = GameStatus.Started;
+        //     
+        // }
         
-        // var game = room.Games
-        //     .Where(x => x).OrderByDescending(x => x.CreateDate)
+        
     }
 }

@@ -5,10 +5,10 @@ namespace RPS.Services.Game.Features.Room.Queries.GetRoomsQuery;
 
 public class GetRoomsQuery : IRequest<GetRoomsResponse>
 {
-    public GetRoomsQuery(GetRoomsRequest request)
+    public GetRoomsQuery(int limit, int offset)
     {
-        Limit = request.Limit;
-        Offset = request.Offset;
+        Limit = limit;
+        Offset = offset;
     }
     
     public int Limit { get; set; }
