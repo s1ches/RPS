@@ -7,7 +7,7 @@ namespace RPS.Services.Game.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/rounds")]
-public class RoundController(IMediatr mediatr) : ControllerBase
+public class RoundController(IMediator mediator) : ControllerBase
 {
     
 }

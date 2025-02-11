@@ -6,8 +6,12 @@ namespace RPS.Services.Game.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/rounds")]
-public class GameController(IMediatr mediatr) : ControllerBase
+[Route("api/games")]
+public class GameController(IMediator mediator) : ControllerBase
 {
-    
+    [HttpPost]
+    public async Task JoinGame()
+    {
+        
+    }
 }

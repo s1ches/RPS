@@ -12,14 +12,14 @@ namespace RPS.Services.Accounts.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/users")]
-public class UserController(IMediatr mediatr, IClaimsProvider claimsProvider) : ControllerBase
+public class UserController(IMediator mediator, IClaimsProvider claimsProvider) : ControllerBase
 {
     [HttpGet]
     public async Task<GetUserResponse> GetUser(CancellationToken cancellationToken)
     {
         var userId = claimsProvider.GetUserId(HttpContext.User);
         
-        return await mediatr.SendAsync<GetUserQuery, GetUserResponse>(new GetUserQuery(userId),
+        return await mediator.SendAsync<GetUserQuery, GetUserResponse>(new GetUserQuery(userId),
             cancellationToken);
     }
 
@@ -27,7 +27,7 @@ public class UserController(IMediatr mediatr, IClaimsProvider claimsProvider) : 
     public async Task<GetUsersInfosResponse> GetUsersInfos(GetUsersInfosRequest request,
         CancellationToken cancellationToken)
     {
-        return await mediatr.SendAsync<GetUsersInfosQuery, GetUsersInfosResponse>(new GetUsersInfosQuery(request),
+        return await mediator.SendAsync<GetUsersInfosQuery, GetUsersInfosResponse>(new GetUsersInfosQuery(request),
             cancellationToken);
     }
 }
