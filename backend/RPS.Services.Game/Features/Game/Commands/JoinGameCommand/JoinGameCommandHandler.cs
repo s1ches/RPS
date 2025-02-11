@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using RPS.Common.Grpc;
-using RPS.Common.Grpc.Clients.Accounts;
 using RPS.Common.MediatR.ModelsAbstractions;
 using RPS.Common.MediatR.PipelineItems;
 using RPS.Services.Game.Data;
