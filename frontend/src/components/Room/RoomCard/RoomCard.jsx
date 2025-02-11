@@ -1,5 +1,3 @@
-// components/Game/RoomCard.js
-
 import React from 'react';
 
 const RoomCard = ({ room }) => {
