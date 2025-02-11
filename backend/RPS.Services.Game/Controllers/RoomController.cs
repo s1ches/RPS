@@ -41,10 +41,10 @@ public class RoomController(IMediator mediator, IClaimsProvider claimsProvider) 
         await mediator.SendAsync(new LeaveRoomCommand(userId, roomId), cancellationToken);
     }
 
-    [HttpGet]
-    public async Task<GetRoomsResponse> GetRooms(GetRoomsRequest request, CancellationToken cancellationToken)
+    [HttpGet("?limit={limit:int}&offset={offset:int}")]
+    public async Task<GetRoomsResponse> GetRooms(int limit, int offset, CancellationToken cancellationToken)
     {
-        return await mediator.SendAsync<GetRoomsQuery, GetRoomsResponse>(new GetRoomsQuery(request), cancellationToken);
+        return await mediator.SendAsync<GetRoomsQuery, GetRoomsResponse>(new GetRoomsQuery(limit, offset), cancellationToken);
     }
 
     [HttpGet("{id:long}")]
