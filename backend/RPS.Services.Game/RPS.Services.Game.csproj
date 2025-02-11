@@ -18,15 +18,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-      <Folder Include="Data\" />
-      <Folder Include="Entities\" />
-      <Folder Include="Features\" />
-      <Folder Include="Requests\" />
+      <Folder Include="Features\Game\Commands\" />
+      <Folder Include="Features\Room\Queries\" />
+      <Folder Include="Features\Round\Commands\" />
+      <Folder Include="Requests\Game\CreateGame\" />
+      <Folder Include="Requests\Game\UpdateGame\" />
+      <Folder Include="Requests\Room\GetRooms\" />
+      <Folder Include="Requests\Room\GetRoom\" />
+      <Folder Include="Requests\Room\UpdateRoom\" />
+      <Folder Include="Requests\Round\CreateRound\" />
+      <Folder Include="Requests\Round\UpdateRound\" />
       <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RPS.Common.Grpc\RPS.Common.Grpc.csproj" />
       <ProjectReference Include="..\RPS.Common\RPS.Common.csproj" />
     </ItemGroup>
 

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "RPS.Common.Grpc";
+
+import "google/protobuf/empty.proto";
+
+service AccountsService {
+  rpc UpdateUserStatus(UpdateUserStatusRequest)
+      returns (google.protobuf.Empty);
+  
+  rpc GetUserStatus(GetUserStatusRequest)
+      returns (GetUserStatusResponse);
+}
+
+message UpdateUserStatusRequest {
+  int64 user_id = 1;
+  UserStatus status = 2;
+}
+
+message GetUserStatusRequest {
+  int64 user_id = 1;
+}
+
+message GetUserStatusResponse {
+  UserStatus status = 1;
+}
+
+enum UserStatus{
+    Offline = 0;
+    InGame = 1;
+    Spectator = 2;
+}

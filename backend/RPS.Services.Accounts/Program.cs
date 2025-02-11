@@ -1,11 +1,14 @@
 using MassTransit;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using RPS.Common.Configuration;
 using RPS.Common.Masstransit.Constansts;
 using RPS.Common.Masstransit.Events;
 using RPS.Common.MediatR;
 using RPS.Common.Middlewares;
 using RPS.Common.Options;
+using RPS.Common.Options.KestrelOptions;
 using RPS.Services.Accounts.Configuration;
+using RPS.Services.Accounts.GrpcServer;
 using RPS.Services.Accounts.Masstransit.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +69,12 @@ builder.Services.AddCors(corsOptions);
 builder.Services.Configure<CorsOptions>(builder.Configuration.GetSection(nameof(CorsOptions)));
 #endregion
 
+#region Kestrel and gRPC Configuration
+var kestrelOptions = builder.Configuration.GetSection(nameof(KestrelOptions)).Get<KestrelOptions>()!;
+builder.WebHost.ConfigureKestrel(kestrelOptions);
+builder.Services.AddGrpc();
+#endregion
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -85,4 +94,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGrpcService<AccountsServer>();
 app.Run();
