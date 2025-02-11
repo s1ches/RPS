@@ -3,13 +3,14 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useUserStore} from '../../../stores/userStore';
 import './styles/Navbar.css';
+import {disconnectFromRoom} from "../../../services/signalR";
 
 const Navbar = () => {
     let {user, logout} = useUserStore();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        logout();
+        disconnectFromRoom().then(() =>  logout())
         navigate('/login');
     };
 

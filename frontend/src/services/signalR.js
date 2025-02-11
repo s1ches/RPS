@@ -1,4 +1,5 @@
 import * as signalR from "@microsoft/signalr";
+import {HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 
 let connection = null;
 
@@ -8,9 +9,11 @@ export const connectToRoom = async () => {
         return connection;
     }
 
-    connection = new signalR.HubConnectionBuilder()
-        .withUrl(process.env.REACT_APP_RPS_SIGNALR)
-        .withAutomaticReconnect()
+    connection = new HubConnectionBuilder()
+        .withUrl(process.env.REACT_APP_RPS_SIGNALR, {
+            accessTokenFactory: () => localStorage.getItem("token"),
+        })
+        .configureLogging(LogLevel.Information)
         .build();
 
     try {

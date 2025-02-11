@@ -5,6 +5,7 @@ import RoomCard from "../../components/Room/RoomCard/RoomCard";
 import {RoomStatus} from "../../models/Shared/roomStatus";
 import {createRoom, getRooms, joinRoom} from "../../services/room";
 import {useNavigate} from "react-router-dom";
+import {connectToRoom} from "../../services/signalR";
 
 const HomePage = () => {
     const [rooms, setRooms] = useState([]);
@@ -52,22 +53,30 @@ const HomePage = () => {
         }
     }, [loading, offset, totalRooms]);
 
+    const fetchRooms = useCallback(async () => {
+        if (loading)
+            return;
+
+        setLoading(true);
+        const roomsData = await getRooms(limit, offset);
+
+        if (roomsData.totalCount > 0) {
+            setRooms((prevRooms) => [...prevRooms, ...roomsData.rooms]);
+            setTotalRooms(roomsData.totalCount);
+        } else {
+            alert("Комнат нет")
+        }
+
+        setLoading(false);
+
+    }, [loading]);
+
     useEffect(() => {
-        const fetchRooms = (async () => {
-            if (loading)
-                return;
-
-            setLoading(true);
-            const {rooms, totalCount} = await getRooms(limit, offset);
-            setRooms((prevRooms) => [...prevRooms, ...rooms]);
-            setTotalRooms(totalCount);
-
-            setLoading(false);
-
-        });
-
-        fetchRooms();
-    }, [loading, offset, limit]);
+        connectToRoom().then((connection) => {
+            fetchRooms()
+            console.log(connection)
+        })
+    }, [offset]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
