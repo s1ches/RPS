@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import {createContext, useContext, useState} from 'react';
 import User from '../models/User';
 
 // Создаём контекст
@@ -8,12 +8,17 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(new User());
 
-    const login = (userData) => {
-        const newUser = new User(userData.id, userData.username, userData.rating);
-        setUser(newUser);
-    };
+    // const login = (userData) => {
+    //     const newUser = new User(userData.id, userData.username, userData.rating);
+    //     setUser(newUser);
+    // };
+
+    const login = (user) => {
+        setUser(user);
+    }
 
     const logout = () => {
+        localStorage.removeItem('token');
         setUser(new User());
     };
 

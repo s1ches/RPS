@@ -1,50 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { useUserStore } from './stores/userStore';
+import React, {useEffect} from 'react';
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage';
 import RoomPage from './pages/Room/RoomPage';
 import Navbar from "./components/Shared/Navbar/Navbar";
 import './App.css'
+import {useUserStore} from "./stores/userStore";
+import User from "./models/User";
 
 const App = () => {
-    const {isAuth} = useUserStore();
-    const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
+    const { user, login } = useUserStore();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setIsLoggedIn(true);
-        // if (token) {
-        //     setIsLoggedIn(true);
-        // }
+        if (token) {
+            let user = new User('1', 'fuzikort', 0, true) //TODO заменить
+            if (user) {
+                login(user);
+            }
+        }
     }, []);
 
     return (
         <BrowserRouter>
             <div className="App">
-                {isLoggedIn && <Navbar />}
+                {user.isAuth && <Navbar />}
                 <Routes>
-                    {/* Главная страница, доступна только после авторизации */}
-                    <Route
-                        path="/"
-                        element={
-                            // isLoggedIn ? (
-                                <HomePage />
-                            // ) : (
-                                // <Navigate to="/login" replace />
-                            // )
-                        }
-                    />
-
-                    {/* Страница логина */}
-                    <Route path="/login" element={<LoginPage />} />
-
-                    {/* Страница регистрации */}
-                    <Route path="/register" element={<RegisterPage />} />
-
-                    {/* Страница игры */}
-                    <Route path="/game/:id" element={<RoomPage />} />
+                    <Route path="/" element={user.isAuth ? <HomePage /> : <Navigate to="/login" replace />} />
+                    <Route path="/login" element={user.isAuth ? <Navigate to="/" replace /> : <LoginPage />} />
+                    <Route path="/register" element={user.isAuth ? <Navigate to="/" replace /> : <RegisterPage />} />
+                    <Route path="/room/:id" element={user.isAuth ? <Navigate to="/" replace /> : <RoomPage />} />
                 </Routes>
             </div>
         </BrowserRouter>

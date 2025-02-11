@@ -54,7 +54,7 @@ public class RegisterCommandValidator(
             throw new ApplicationExceptionBase("Passwords do not match", HttpStatusCode.BadRequest);
         }
 
-        if (request.Password.Length < 6)
+        if (request.Password.Length < _authOptions.MinimumPasswordLength)
         {
             throw new ApplicationExceptionBase(
                 $"Password must be at least {_authOptions.MinimumPasswordLength} characters",

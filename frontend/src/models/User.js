@@ -1,9 +1,10 @@
 // models/User.js
 class User {
-    constructor(id = '', username = '', rating = 0) {
+    constructor(id = '', username = '', rating = 0, isAuth = false) {
         this._id = id;
         this._username = username;
         this._rating = rating;
+        this._isAuth = isAuth;
     }
 
     get id() {
@@ -12,6 +13,10 @@ class User {
 
     get username() {
         return this._username;
+    }
+
+    get isAuth(){
+        return this._isAuth;
     }
 
     get rating() {

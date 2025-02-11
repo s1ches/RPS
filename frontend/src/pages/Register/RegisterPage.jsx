@@ -6,22 +6,34 @@ import './styles/RegisterPage.css'
 
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useUserStore();
 
-    const handleRegister = async (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
-        try {
-            const user = await registerUser(username, password, confirmPassword);
-            login(user); // Обновляем состояние пользователя
-            localStorage.setItem('token', 'fake-jwt-token'); // Пример, замени на реальный токен
-            navigate('/'); // Перенаправляем на главную страницу
-        } catch (error) {
-            alert('Ошибка при регистрации: ' + error.message);
+
+        if (password !== confirmPassword) {
+            alert('Пароли не совпадают');
+            return;
         }
+
+        registerUser(username, email, password, confirmPassword)
+            .then(({ user, error }) => {
+                if (error) {
+                    console.log(error)
+                    alert(error);
+                } else if (user) {
+                    login(user);
+                    navigate('/');
+                } else {
+                    alert('Невозможно зарегистрироваться. Попробуйте позже.');
+                }
+            });
     };
+
 
     return (
         <div className="registerPage__container">
@@ -33,6 +45,14 @@ const RegisterPage = () => {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <input
+                    className="registerPage__input"
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                 />
                 <input
