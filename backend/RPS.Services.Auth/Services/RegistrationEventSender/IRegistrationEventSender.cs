@@ -4,5 +4,5 @@ namespace RPS.Services.Auth.Services.RegistrationEventSender;
 
 public interface IRegistrationEventSender
 {
-    Task SendRegistrationEventAsync(User user, CancellationToken cancellationToken);
+    Task SendEventAsync(User user, CancellationToken cancellationToken = default);
 }

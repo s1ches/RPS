@@ -5,7 +5,10 @@ using RPS.Common.Masstransit.Events;
 using RPS.Common.MediatR;
 using RPS.Common.Middlewares;
 using RPS.Common.Options;
+using RPS.Common.Options.KestrelOptions;
+using RPS.Common.Services.ClaimsProvider;
 using RPS.Services.Accounts.Configuration;
+using RPS.Services.Accounts.GrpcServer;
 using RPS.Services.Accounts.Masstransit.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +31,7 @@ builder.Services.AddMongoDb(builder.Configuration);
 
 #region Services Configuration
 builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddScoped<IClaimsProvider, ClaimsProvider>();
 #endregion
 
 #region Masstransit Configuration
@@ -36,6 +40,8 @@ builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<RegistrationConsumer>();
+    x.AddConsumer<UserStatusConsumer>();
+    x.AddConsumer<UserRatingConsumer>();
     
     x.UsingRabbitMq((ctx, cfg) =>
     {
@@ -54,6 +60,32 @@ builder.Services.AddMassTransit(x =>
             });
         });
         
+        cfg.ReceiveEndpoint(RabbitMqConstants.UpdateUserStatusEventsQueueName, e =>
+        { 
+            e.ConfigureConsumeTopology = false;
+            e.ConfigureConsumer<UserStatusConsumer>(ctx);
+
+            e.Bind<UpdateUserStatusEvent>(exchange =>
+            {
+                exchange.Durable = true;
+                exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
+                exchange.RoutingKey = RabbitMqConstants.UpdateUserStatusEventsRoutingKey;
+            });
+        });
+        
+        cfg.ReceiveEndpoint(RabbitMqConstants.UpdateUserRatingEventsQueueName, e =>
+        { 
+            e.ConfigureConsumeTopology = false;
+            e.ConfigureConsumer<UserRatingConsumer>(ctx);
+
+            e.Bind<UpdateUserRatingEvent>(exchange =>
+            {
+                exchange.Durable = true;
+                exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
+                exchange.RoutingKey = RabbitMqConstants.UpdateUserRatingEventsRoutingKey;
+            });
+        });
+        
         cfg.ConfigureEndpoints(ctx);
     });
 });
@@ -64,6 +96,12 @@ var corsOptions = new CorsOptions();
 builder.Configuration.GetSection(nameof(CorsOptions)).Bind(corsOptions);
 builder.Services.AddCors(corsOptions);
 builder.Services.Configure<CorsOptions>(builder.Configuration.GetSection(nameof(CorsOptions)));
+#endregion
+
+#region Kestrel and gRPC Configuration
+var kestrelOptions = builder.Configuration.GetSection(nameof(KestrelOptions)).Get<KestrelOptions>()!;
+builder.WebHost.ConfigureKestrel(kestrelOptions);
+builder.Services.AddGrpc();
 #endregion
 
 var app = builder.Build();
@@ -85,4 +123,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGrpcService<AccountsServer>();
 app.Run();

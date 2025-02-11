@@ -1,4 +1,3 @@
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RPS.Services.Auth.Data.EntitiesConfigurations;
 using RPS.Services.Auth.Domain.Entities;
