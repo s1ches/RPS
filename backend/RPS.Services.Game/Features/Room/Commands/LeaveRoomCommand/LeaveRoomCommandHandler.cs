@@ -99,7 +99,7 @@ public class LeaveRoomCommandHandler(
             
             await roomHub.Clients
                 .Group(GroupNameHelper.GetGroupName<RoomHub>(room.Id))
-                .SendCoreAsync(RoomHubConstants.LeaveRoomMethodName, [knowWinnerModel], cancellationToken);
+                .SendCoreAsync(RoomHubConstants.KnowWinner, [knowWinnerModel], cancellationToken);
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);
