@@ -1,38 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
-import {useUserStore} from './stores/userStore';
 import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage';
 import RoomPage from './pages/Room/RoomPage';
 import Navbar from "./components/Shared/Navbar/Navbar";
 import './App.css'
+import {useUserStore} from "./stores/userStore";
+import User from "./models/User";
 
 const App = () => {
-    const {isAuth} = useUserStore();
-    const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
+    const { user, login } = useUserStore();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            setIsLoggedIn(true);
+            let user = new User('1', 'fuzikort', 0, true) //TODO заменить
+            if (user) {
+                login(user);
+            }
         }
     }, []);
 
     return (
         <BrowserRouter>
             <div className="App">
-                {isLoggedIn && <Navbar/>}
+                {user.isAuth && <Navbar />}
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            isLoggedIn ? (<HomePage/>) : (<Navigate to="/login" replace/>)
-                        }
-                    />
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path="/game/:id" element={<RoomPage/>}/>
+                    <Route path="/" element={user.isAuth ? <HomePage /> : <Navigate to="/login" replace />} />
+                    <Route path="/login" element={user.isAuth ? <Navigate to="/" replace /> : <LoginPage />} />
+                    <Route path="/register" element={user.isAuth ? <Navigate to="/" replace /> : <RegisterPage />} />
+                    <Route path="/room/:id" element={user.isAuth ? <Navigate to="/" replace /> : <RoomPage />} />
                 </Routes>
             </div>
         </BrowserRouter>

@@ -12,16 +12,28 @@ const RegisterPage = () => {
     const navigate = useNavigate();
     const { login } = useUserStore();
 
-    const handleRegister = async (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
-        try {
-            const user = await registerUser(username, email, password, confirmPassword);
-            login(user);
-            navigate('/');
-        } catch (error) {
-            alert('Ошибка при регистрации: ' + error.message);
+
+        if (password !== confirmPassword) {
+            alert('Пароли не совпадают');
+            return;
         }
+
+        registerUser(username, email, password, confirmPassword)
+            .then(({ user, error }) => {
+                if (error) {
+                    console.log(error)
+                    alert(error);
+                } else if (user) {
+                    login(user);
+                    navigate('/');
+                } else {
+                    alert('Невозможно зарегистрироваться. Попробуйте позже.');
+                }
+            });
     };
+
 
     return (
         <div className="registerPage__container">

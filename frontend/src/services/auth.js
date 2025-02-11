@@ -2,29 +2,26 @@ import {api} from './api';
 import User from "../models/User";
 
 export const registerUser = async (username, email, password, confirmPassword) => {
-    try {
-        const response = await api.post('/auth/register', {username, email, password, confirmPassword});
+    const response = await api.post('/auth/register', {username, email, password, confirmPassword});
+    if (response.status === 200) {
         const token = response.data;
         localStorage.setItem('token', token);
-        //TODO: запрос на юзера
-        return new User('1', 'fuzikort', 0);
-    } catch (error) {
-        console.error('Ошибка регистрации:', error.response?.data?.message || error.message);
-        return {error: 'Ошибка при регистрации'};  // Возвращаем ошибку, а не выбрасываем исключение
+        //TODO запрос на юзера
+        return {user: new User('1', 'fuzikort', 0, true), error: null};
+    } else {
+        return {user: null, error: response.data.Message};
     }
 };
 
 export const loginUser = async (email, password) => {
-    try {
-        const response = await api.post('/auth/login', {username: email, password});
+    const response = await api.post('/auth/login', {email, password});
+    if (response.status === 200) {
         const token = response.data;
         localStorage.setItem('token', token);
-        //TODO: запрос на юзера
-        let user = new User('1', 'fuzikort', 0)
-        return {user};
-    } catch (error) {
-        console.error('Ошибка авторизации:', error.response?.data?.message || error.message);
-        return {error: 'Ошибка при авторизации'};
+        //TODO запрос на юзера
+        return {user: new User('1', 'fuzikort', 0, true), error: null};
+    } else {
+        return {user: null, error: response.data.Message};
     }
 };
 
@@ -43,9 +40,4 @@ export const getCurrentUser = async () => {
         console.error('Ошибка при получении данных пользователя:', error.response?.data?.message || error.message);
         return {error: 'Ошибка при получении данных пользователя'};
     }
-};
-
-// Логика выхода пользователя
-export const logoutUser = () => {
-    localStorage.removeItem('token');
 };

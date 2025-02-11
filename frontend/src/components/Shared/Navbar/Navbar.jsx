@@ -1,48 +1,35 @@
 // components/Navbar.jsx
 import React from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {useUserStore} from '../../../stores/userStore'; // Если используете Zustand или другой state
+import {useNavigate} from 'react-router-dom';
+import {useUserStore} from '../../../stores/userStore';
 import './styles/Navbar.css';
 
 const Navbar = () => {
-    let {isAuth, logout, username, rating} = useUserStore(); // Добавляем username и rating из состояния
+    let {user, logout} = useUserStore();
     const navigate = useNavigate();
-    isAuth = true;
-    username = 'fuzikort';
-    rating = 5;
 
     const handleLogout = () => {
-        logout(); // Очистить состояние пользователя в хранилище
-        localStorage.removeItem('token'); // Удалить токен из localStorage
-        navigate('/login'); // Перенаправить на страницу логина
+        logout();
+        navigate('/login');
     };
 
     return (
-        <nav className="navbar">
-            <div className="navbar__title">Камень, Ножницы, Бумага</div>
-            <ul>
-                {isAuth ? (
-                    <>
+        <>
+            {user.isAuth ? (<nav className="navbar">
+                <div className="navbar__title">Камень, Ножницы, Бумага</div>
+                <ul>
                         <li className="navbar__user-info">
-                            <span>{username}</span> {/* Отображаем ник пользователя */}
-                            <span>Рейтинг: {rating}</span> {/* Отображаем рейтинг */}
+                            <span>{user.username}</span>
+                            <span>Рейтинг: {user.rating}</span>
                         </li>
                         <li>
                             <button onClick={handleLogout}>Выйти</button>
                         </li>
-                    </>
-                ) : (
-                    <>
-                        <li>
-                            <Link to="/login">Войти</Link>
-                        </li>
-                        <li>
-                            <Link to="/register">Зарегистрироваться</Link>
-                        </li>
-                    </>
-                )}
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+            ) : <></>
+            }
+        </>
     );
 };
 
