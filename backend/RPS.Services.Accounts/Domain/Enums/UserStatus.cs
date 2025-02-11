@@ -4,5 +4,6 @@ public enum UserStatus
 {
     Offline = 0,
     InGame = 1,
-    Spectator = 2
+    Spectator = 2,
+    Online = 3
 }

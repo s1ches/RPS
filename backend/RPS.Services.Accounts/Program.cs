@@ -1,5 +1,4 @@
 using MassTransit;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using RPS.Common.Configuration;
 using RPS.Common.Masstransit.Constansts;
 using RPS.Common.Masstransit.Events;
@@ -7,6 +6,7 @@ using RPS.Common.MediatR;
 using RPS.Common.Middlewares;
 using RPS.Common.Options;
 using RPS.Common.Options.KestrelOptions;
+using RPS.Common.Services.ClaimsProvider;
 using RPS.Services.Accounts.Configuration;
 using RPS.Services.Accounts.GrpcServer;
 using RPS.Services.Accounts.Masstransit.Consumers;
@@ -31,6 +31,7 @@ builder.Services.AddMongoDb(builder.Configuration);
 
 #region Services Configuration
 builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddScoped<IClaimsProvider, ClaimsProvider>();
 #endregion
 
 #region Masstransit Configuration
@@ -39,6 +40,8 @@ builder.Configuration.GetSection(nameof(RabbitMqOptions)).Bind(rabbitMqOptions);
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<RegistrationConsumer>();
+    x.AddConsumer<UserStatusConsumer>();
+    x.AddConsumer<UserRatingConsumer>();
     
     x.UsingRabbitMq((ctx, cfg) =>
     {
@@ -54,6 +57,32 @@ builder.Services.AddMassTransit(x =>
                 exchange.Durable = true;
                 exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
                 exchange.RoutingKey = RabbitMqConstants.RegistrationEventsRoutingKey;
+            });
+        });
+        
+        cfg.ReceiveEndpoint(RabbitMqConstants.UpdateUserStatusEventsQueueName, e =>
+        { 
+            e.ConfigureConsumeTopology = false;
+            e.ConfigureConsumer<UserStatusConsumer>(ctx);
+
+            e.Bind<UpdateUserStatusEvent>(exchange =>
+            {
+                exchange.Durable = true;
+                exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
+                exchange.RoutingKey = RabbitMqConstants.UpdateUserStatusEventsRoutingKey;
+            });
+        });
+        
+        cfg.ReceiveEndpoint(RabbitMqConstants.UpdateUserRatingEventsQueueName, e =>
+        { 
+            e.ConfigureConsumeTopology = false;
+            e.ConfigureConsumer<UserRatingConsumer>(ctx);
+
+            e.Bind<UpdateUserRatingEvent>(exchange =>
+            {
+                exchange.Durable = true;
+                exchange.ExchangeType = RabbitMqConstants.DirectExchangeType;
+                exchange.RoutingKey = RabbitMqConstants.UpdateUserRatingEventsRoutingKey;
             });
         });
         

@@ -14,7 +14,7 @@ public class Room : AuditableEntityBase
     
     public List<Game> Games { get; set; } = [];
 
-    public List<long> Spectators { get; set; } = [];
+    public List<Participant> Spectators { get; set; } = [];
     
     public List<RoomChange> RoomChanges { get; set; } = [];
 }

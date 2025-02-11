@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+        <PackageReference Include="MassTransit" Version="8.3.6" />
+        <PackageReference Include="MassTransit.Abstractions" Version="8.3.6" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
@@ -25,10 +29,8 @@
       <Folder Include="Requests\Game\UpdateGame\" />
       <Folder Include="Requests\Room\GetRooms\" />
       <Folder Include="Requests\Room\GetRoom\" />
-      <Folder Include="Requests\Room\UpdateRoom\" />
       <Folder Include="Requests\Round\CreateRound\" />
       <Folder Include="Requests\Round\UpdateRound\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>

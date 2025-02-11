@@ -12,6 +12,8 @@ public class GameDbContext : DbContext
     public GameDbContext(DbContextOptions<GameDbContext> options) : base(options)
     { }
 
+    public DbSet<Participant> Participants { get; set; }
+    
     public DbSet<Room> Rooms { get; set; }
     
     public DbSet<RoomChange> RoomsChanges { get; set; }
