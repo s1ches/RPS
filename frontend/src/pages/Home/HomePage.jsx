@@ -3,6 +3,8 @@ import './styles/HomePage.css'
 import Room from "../../models/Room";
 import RoomCard from "../../components/Room/RoomCard/RoomCard";
 import {RoomStatus} from "../../models/Shared/roomStatus";
+import {createRoom, getRooms, joinRoom} from "../../services/room";
+import {useNavigate} from "react-router-dom";
 
 const HomePage = () => {
     const [rooms, setRooms] = useState([]);
@@ -10,6 +12,7 @@ const HomePage = () => {
     const [offset, setOffset] = useState(0);
     const [totalRooms, setTotalRooms] = useState(0);
     const [maxRating, setMaxRating] = useState(0);
+    let navigate = useNavigate();
     const limit = 10;
 
     useEffect(() => {
@@ -41,35 +44,30 @@ const HomePage = () => {
         setTotalRooms(rooms.length);
     }, []);
 
-
-    // // Функция загрузки игр с использованием limit и offset
-    // const fetchRooms = useCallback(async () => {
-    //     if (loading) return; // Предотвращаем множественные запросы
-    //     setLoading(true);
-    //     try {
-    //         const response = await api.get(`/rooms?limit=${limit}&offset=${offset}`);
-    //         setRooms((prevRooms) => [...prevRooms, ...response.data.rooms]); // Добавляем новые комнаты
-    //         setTotalRooms(response.data.totalRooms);
-    //     } catch (error) {
-    //         console.error('Ошибка при загрузке комнат', error);
-    //         alert('Ошибка при загрузке комнат');
-    //     }
-    //     setLoading(false);
-    // }, [loading, offset, limit]);
-
     // Обработчик скролла
     const handleScroll = useCallback(() => {
         const bottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
         if (bottom && !loading && offset + limit < totalRooms) {
-            setOffset((prevOffset) => prevOffset + limit);  // Переход к следующей порции данных
+            setOffset((prevOffset) => prevOffset + limit);
         }
     }, [loading, offset, totalRooms]);
 
-    // useEffect(() => {
-    //     if (isAuth) {
-    //         fetchRooms(); // Загружаем комнаты, если пользователь авторизован
-    //     }
-    // }, [isAuth, offset, fetchRooms]); // Загружаем комнаты при изменении offset
+    useEffect(() => {
+        const fetchRooms = (async () => {
+            if (loading)
+                return;
+
+            setLoading(true);
+            const {rooms, totalCount} = await getRooms(limit, offset);
+            setRooms((prevRooms) => [...prevRooms, ...rooms]);
+            setTotalRooms(totalCount);
+
+            setLoading(false);
+
+        });
+
+        fetchRooms();
+    }, [loading, offset, limit]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -80,14 +78,21 @@ const HomePage = () => {
 
     const handleCreateRoom = () => {
         if (maxRating) {
-            alert("Создали комнату")
-            return;
-            const newRoom = new Room();
-            newRoom.maxRating = parseInt(maxRating, 10);
-            newRoom.status = RoomStatus.WaitingForPlayer;
-            setRooms((prevRooms) => [...prevRooms, newRoom]);
-            setTotalRooms((prevTotalRooms) => prevTotalRooms + 1);
-            setMaxRating(''); // Очистить поле ввода
+            createRoom(maxRating).then(({roomId, error}) => {
+                if (error) {
+                    console.log(error)
+                    alert(error);
+                } else {
+                    joinRoom(roomId).then((error) => {
+                        if (error) {
+                            console.log(error)
+                            alert(error);
+                        } else {
+                            navigate(`/rooms/${roomId}`)
+                        }
+                    })
+                }
+            })
         } else {
             alert('Пожалуйста, введите максимальный рейтинг!');
         }
