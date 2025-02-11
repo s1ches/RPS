@@ -13,6 +13,7 @@ using RPS.Common.Options.KestrelOptions;
 using RPS.Common.Services.ClaimsProvider;
 using RPS.Services.Game.Data;
 using RPS.Services.Game.Hubs;
+using RPS.Services.Game.Hubs.Room;
 using RPS.Services.Game.Services.UpdateUserRatingEventSender;
 using RPS.Services.Game.Services.UpdateUserStatusEventSender;
 

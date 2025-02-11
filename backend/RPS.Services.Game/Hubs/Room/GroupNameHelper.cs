@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace RPS.Services.Game.Hubs;
+namespace RPS.Services.Game.Hubs.Room;
 
 public static class GroupNameHelper
 {

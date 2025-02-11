@@ -4,7 +4,7 @@ using RPS.Services.Game.Domain.Enums;
 
 namespace RPS.Services.Game.Domain.EntitiesChanges;
 
-public class RoundChange : EntityBase
+public class RoundChange : EntityChangeBase
 {
     public long RoundId { get; set; }
 

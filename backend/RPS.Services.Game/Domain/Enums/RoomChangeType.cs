@@ -2,7 +2,7 @@ namespace RPS.Services.Game.Domain.Enums;
 
 public enum RoomChangeType
 {
-    Addpectator,
+    AddSpectator,
     LeaveSpectator,
     AddPlayer,
     LeavePlayer,

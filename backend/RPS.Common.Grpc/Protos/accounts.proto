@@ -5,24 +5,18 @@ option csharp_namespace = "RPS.Common.Grpc";
 import "google/protobuf/empty.proto";
 
 service AccountsService {
-  rpc UpdateUserStatus(UpdateUserStatusRequest)
-      returns (google.protobuf.Empty);
-  
-  rpc GetUserStatus(GetUserStatusRequest)
-      returns (GetUserStatusResponse);
+  rpc GetUser(GetUserRequest)
+      returns (GetUserResponse);
 }
 
-message UpdateUserStatusRequest {
-  int64 user_id = 1;
-  UserStatus status = 2;
-}
-
-message GetUserStatusRequest {
+message GetUserRequest {
   int64 user_id = 1;
 }
 
-message GetUserStatusResponse {
-  UserStatus status = 1;
+message GetUserResponse {
+  string user_name = 1;
+  int64 rating = 2;
+  UserStatus status = 3;
 }
 
 enum UserStatus{

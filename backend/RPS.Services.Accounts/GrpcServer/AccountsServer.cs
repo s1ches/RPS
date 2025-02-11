@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using RPS.Common.Grpc;
 using RPS.Services.Accounts.Data.MongoDbService;
@@ -8,7 +7,7 @@ namespace RPS.Services.Accounts.GrpcServer;
 public class AccountsServer(ILogger<AccountsServer> logger, IMongoDbService mongoDbService)
     : AccountsService.AccountsServiceBase
 {
-    public override async Task<GetUserStatusResponse> GetUserStatus(GetUserStatusRequest request,
+    public override async Task<GetUserResponse> GetUser(GetUserRequest request,
         ServerCallContext context)
     {
         logger.LogInformation("Get user status request received, for user with id {id}", request.UserId);
@@ -19,15 +18,11 @@ public class AccountsServer(ILogger<AccountsServer> logger, IMongoDbService mong
 
         var user = await mongoDbService.GetUserAsync(request.UserId, context.CancellationToken);
 
-        return new GetUserStatusResponse
+        return new GetUserResponse
         {
+            UserName = user.UserName,
+            Rating = user.Rating,
             Status = (UserStatus)user.Status,
         };
-    }
-
-    // TODO: Maybe remove this
-    public override Task<Empty> UpdateUserStatus(UpdateUserStatusRequest request, ServerCallContext context)
-    {
-        return base.UpdateUserStatus(request, context);
     }
 }

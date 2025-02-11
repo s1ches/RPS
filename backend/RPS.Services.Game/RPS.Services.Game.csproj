@@ -23,12 +23,9 @@
 
     <ItemGroup>
       <Folder Include="Features\Game\Commands\" />
-      <Folder Include="Features\Room\Queries\" />
       <Folder Include="Features\Round\Commands\" />
       <Folder Include="Requests\Game\CreateGame\" />
       <Folder Include="Requests\Game\UpdateGame\" />
-      <Folder Include="Requests\Room\GetRooms\" />
-      <Folder Include="Requests\Room\GetRoom\" />
       <Folder Include="Requests\Round\CreateRound\" />
       <Folder Include="Requests\Round\UpdateRound\" />
     </ItemGroup>

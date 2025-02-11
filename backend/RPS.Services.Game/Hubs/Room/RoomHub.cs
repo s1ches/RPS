@@ -7,7 +7,7 @@ using RPS.Services.Game.Data;
 using RPS.Services.Game.Domain.Entities;
 using RPS.Services.Game.Services.UpdateUserStatusEventSender;
 
-namespace RPS.Services.Game.Hubs;
+namespace RPS.Services.Game.Hubs.Room;
 
 [Authorize]
 public class RoomHub(

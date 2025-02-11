@@ -23,9 +23,10 @@ public class JoinRoomCommandValidator(
         if (!await dbContext.Rooms.AnyAsync(x => x.Id == request.RoomId && x.Status != RoomStatus.Closed,
                 cancellationToken))
         {
-            logger.LogInformation("User with id: {userId}, trying to join in closed room with id: {roomId}",
+            logger.LogInformation(
+                "User with id: {userId}, trying to join in closed room, or room doesn't exist with id: {roomId}",
                 request.UserId, request.RoomId);
-            throw new ApplicationExceptionBase("User cannot join closed room", HttpStatusCode.Forbidden);
+            throw new ApplicationExceptionBase("User cannot join closed room or room doesn't exist", HttpStatusCode.Forbidden);
         }
 
         if (!await dbContext.Participants.AnyAsync(x => x.UserId == request.UserId, cancellationToken))

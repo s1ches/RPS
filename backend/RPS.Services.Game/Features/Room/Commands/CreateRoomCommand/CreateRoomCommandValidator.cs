@@ -23,8 +23,8 @@ public class CreateRoomCommandValidator(ILogger<CreateRoomCommandValidator> logg
             throw new ApplicationExceptionBase("Max allowed game rating cannot be negative", HttpStatusCode.BadRequest);
         }
         
-        var status = await accountsClient.GetUserStatusAsync(request.CreatorId, cancellationToken);
-        if (status == UserStatus.InGame)
+        var user = await accountsClient.GetUserAsync(request.CreatorId, cancellationToken);
+        if (user.Status == UserStatus.InGame)
         {
             logger.LogInformation("User with id: {id} is already in game", request.CreatorId);
             throw new ApplicationExceptionBase("User can be player only in one game", HttpStatusCode.Forbidden);
