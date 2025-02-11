@@ -1,40 +1,36 @@
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import GameComponent from "../../components/Game/GameComponent/GameComponent";
 import {useUserStore} from "../../stores/userStore";
 import {RoomStatus} from "../../models/Shared/roomStatus";
 import './styles/RoomPage.css'
-import Room from "../../models/Room";
 import Game from "../../models/Game";
 import {GameStatus} from "../../models/Shared/gameStatus";
 import {PlayerChoice} from "../../models/Shared/playerChoice";
+import {getRoom, leaveRoom} from "../../services/room";
 
 const RoomPage = () => {
-    const {state} = useLocation();
-    const room = new Room(state?.room);
+    const {roomId} = useParams();
     const {user} = useUserStore();
     const player1Id = 'player-001';
     const player2Id = 'player-002';
+    const [room, setRoom] = useState(null);
     const [game, setGame] = useState(new Game({
         id: "game-001",
-        roomId: room.roomId,
+        roomId: roomId,
         player1: player1Id,
         player2: null,
-        rounds: [{ player1Choice: PlayerChoice.Rock, player2Choice: PlayerChoice.Scissors, winner: player1Id }],
+        rounds: [{player1Choice: PlayerChoice.Rock, player2Choice: PlayerChoice.Scissors, winner: player1Id}],
         status: GameStatus.Started,
         winnerId: null,
         victories1: 0,
         victories2: 0,
     }));
 
-    // const [isJoined, setIsJoined] = useState(false);
-    const [gameStarted, setGameStarted] = useState(true);//TODO: mock
+    const [gameStarted, setGameStarted] = useState(false);
     let navigate = useNavigate();
 
     useEffect(() => {
-        // if (room.player1 === user.id || room.player2 === user.id) {
-        //     setIsJoined(true);
-        // }
 
         if (room.player1 && room.player2 && room.status === RoomStatus.WaitingForPlayer) {
             room.startGame();
@@ -42,9 +38,8 @@ const RoomPage = () => {
         }
     }, [room, user]);
 
-    const joinGame = () => {
+    const joinGameOnClick = () => {
         if (room && user) {
-            // Проверка, можно ли присоединиться как игрок
             if (room.status !== RoomStatus.WaitingForPlayer) {
                 alert("Игра уже началась.");
             } else if (user.rating > room.maxRating) {
@@ -52,8 +47,7 @@ const RoomPage = () => {
             } else if (room.player1 && room.player2) {
                 alert("В комнате уже два игрока, невозможно присоединиться.");
             } else {
-                room.addPlayer(user.id);
-                // setIsJoined(true);
+
 
                 if (room.player1 && room.player2) {
                     room.startGame();
@@ -63,37 +57,34 @@ const RoomPage = () => {
         }
     };
 
-    const leaveRoom = () => {
+    const leaveRoomOnClick = () => {
         if (room && user) {
             if (room.player1 === user.id || room.player2 === user.id) {
                 if (!gameStarted) {
-                    // room.leavePlayer(user.id);
-                    navigate('/')
-                    // setIsJoined(false);
+                    leaveRoom(room.roomId).then(() => navigate('/'))
                 } else {
                     alert("Вы не можете выйти из комнаты, пока игра не завершена.");
                 }
             } else {
-                // room.leaveSpectator(user.id);
-                navigate('/')
-                // setIsJoined(false);
+                leaveRoom(room.roomId).then(() => navigate('/'))
             }
         }
     };
 
-    // useEffect(() => {
-    //     // Загружаем информацию о комнате
-    //     const fetchRoomDetails = async () => {
-    //         try {
-    //             const response = await $gameApi.get(`/rooms/${roomId}`);
-    //             setRoom(response.data);
-    //             setIsCreator(response.data.creator === 'player');
-    //         } catch (error) {
-    //             console.error('Ошибка при загрузке данных комнаты', error);
-    //         }
-    //     };
-    //     fetchRoomDetails();
-    // }, [roomId]);
+    useEffect(() => {
+        const fetchRoomDetails = async () => {
+                getRoom(roomId).then(({room, error}) => {
+                    if(error) {
+                        console.log(error);
+                        alert(error);
+                    }
+                    else{
+                        setRoom(room);
+                    }
+            });
+        };
+        fetchRoomDetails();
+    }, []);
 
     // const joinRoom = () => {
     //     if (userRating >= room.minRating && userRating <= room.maxRating) {
@@ -102,12 +93,6 @@ const RoomPage = () => {
     //     } else {
     //         alert('Ваш рейтинг не соответствует требованиям для этой комнаты');
     //     }
-    // };
-
-    // const startGame = () => {
-    //     // Логика запуска игры
-    //     setGameStarted(true);
-    //     $gameApi.post(`/rooms/${roomId}/start`);
     // };
 
     return (
@@ -123,14 +108,13 @@ const RoomPage = () => {
 
             <div className="room-buttons">
                 {(
-                    // !isJoined ||
-                    !gameStarted) && (
-                    <button onClick={joinGame}>Присоединиться</button>
+                    !gameStarted) &&
+                    user
+                    (
+                    <button onClick={joinGameOnClick}>Присоединиться</button>
                 )}
                 {(
-                    // isJoined &&
-                    // !gameStarted) && (
-                    <button onClick={leaveRoom}>Выйти из комнаты</button>
+                    <button onClick={leaveRoomOnClick}>Выйти из комнаты</button>
                 )}
             </div>
 

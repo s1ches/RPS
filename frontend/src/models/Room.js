@@ -8,7 +8,6 @@ class Room {
                     maxRating = 0,
                     status = RoomStatus.WaitingForPlayer,
                     spectators = [],
-                    games = [],
                     lastActivityTime = Date.now()
                 }) {
         this.roomId = roomId;
@@ -17,7 +16,6 @@ class Room {
         this.maxRating = maxRating;
         this.status = status;
         this.spectators = spectators;
-        this.games = games;
         this.lastActivityTime = lastActivityTime;
     }
 
@@ -40,8 +38,8 @@ class Room {
         this.lastActivityTime = Date.now();
     }
 
-    addSpectator(spectatorId) {
-        this.spectators.push(spectatorId);
+    addSpectator(spectator) {
+        this.spectators.push(spectator);
         this.lastActivityTime = Date.now();
     }
 

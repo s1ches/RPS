@@ -7,7 +7,7 @@ const RoomCard = ({room}) => {
     let navigate = useNavigate();
     const joinRoom = () => {
         if (room.status !== RoomStatus.Closed) {
-            navigate(`/room/${room.roomId}`, {state: {room: room}});
+            navigate(`/room/${room.roomId}`);
         }
     }
 

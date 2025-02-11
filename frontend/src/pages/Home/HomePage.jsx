@@ -69,13 +69,15 @@ const HomePage = () => {
 
         setLoading(false);
 
-    }, [loading]);
+    }, [loading, offset]);
 
     useEffect(() => {
         connectToRoom().then((connection) => {
             fetchRooms()
             console.log(connection)
         })
+
+
     }, [offset]);
 
     useEffect(() => {

@@ -29,7 +29,7 @@ export const leaveRoom = async (roomId) => {
 };
 
 export const getRooms = async (limit, offset) => {
-    const response = await $gameApi.get(`/rooms?limit=${limit}&offset=${offset}`);
+    const response = await $gameApi.get(`/rooms/limit=${limit}&offset=${offset}`);
     if (response.status === 200) {
         return {rooms: response.data.rooms, totalCount: response.data.totalCount, error: null};
     } else {
