@@ -5,7 +5,7 @@ import { useUserStore } from '../../stores/userStore';
 import './styles/LoginPage.css'
 
 const LoginPage = () => {
-    const [username, setusername] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useUserStore();
@@ -13,9 +13,9 @@ const LoginPage = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const user = await loginUser(username, password);
-            login(user); // Обновляем состояние пользователя
-            navigate('/'); // Перенаправляем на главную страницу
+            const userData = await loginUser(username, password);
+            login(userData);
+            navigate('/');
         } catch (error) {
             alert('Ошибка при входе: ' + error.message);
         }
@@ -30,7 +30,7 @@ const LoginPage = () => {
                     type="text"
                     placeholder="Email"
                     value={username}
-                    onChange={(e) => setusername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
                 />
                 <input

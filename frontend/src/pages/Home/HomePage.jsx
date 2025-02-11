@@ -5,13 +5,12 @@ import './styles/HomePage.css'
 import RoomList from "../../components/Game/RoomList/RoomList";
 
 const HomePage = () => {
-    let {isAuth} = useUserStore();
+    const {isAuth} = useUserStore();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!isAuth) {
-            isAuth = true;
-            // navigate('/login');
+            navigate('/login');
         }
     }, [isAuth]); // Добавляем зависимости
 

@@ -15,9 +15,9 @@ const RegisterPage = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const token = await registerUser(username, password, confirmPassword);
-            login(token); // Обновляем состояние пользователя
-            navigate('/'); // Перенаправляем на главную страницу
+            const user = await registerUser(username, email, password, confirmPassword);
+            login(user);
+            navigate('/');
         } catch (error) {
             alert('Ошибка при регистрации: ' + error.message);
         }
