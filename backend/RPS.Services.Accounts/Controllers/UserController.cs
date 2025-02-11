@@ -7,7 +7,7 @@ using RPS.Common.MediatR;
 using RPS.Services.Accounts.Features.User.Queries.GetUserQuery;
 using RPS.Services.Accounts.Features.User.Queries.GetUsersInfosQuery;
 using RPS.Services.Accounts.Requests.User.GetUser;
-using RPS.Services.Accounts.Requests.User.GetUsersRatings;
+using RPS.Services.Accounts.Requests.User.GetUsersInfos;
 
 namespace RPS.Services.Accounts.Controllers;
 

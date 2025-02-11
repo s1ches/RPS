@@ -1,4 +1,4 @@
-namespace RPS.Services.Accounts.Requests.User.GetUsersRatings;
+namespace RPS.Services.Accounts.Requests.User.GetUsersInfos;
 
 public class GetUsersInfosResponseItem
 {

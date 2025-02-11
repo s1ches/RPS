@@ -1,7 +1,7 @@
 using RPS.Common.MediatR.ModelsAbstractions;
 using RPS.Common.MediatR.PipelineItems;
 using RPS.Services.Accounts.Data.MongoDbService;
-using RPS.Services.Accounts.Requests.User.GetUsersRatings;
+using RPS.Services.Accounts.Requests.User.GetUsersInfos;
 
 namespace RPS.Services.Accounts.Features.User.Queries.GetUsersInfosQuery;
 
