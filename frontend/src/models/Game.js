@@ -2,6 +2,7 @@ import {GameStatus} from "./Shared/gameStatus";
 
 class Game {
     constructor({
+                    gameId,
                     roomId,
                     player1,
                     player2,
@@ -10,7 +11,8 @@ class Game {
                     winnerId = null,
                     victories1 = 0,
                     victories2 = 0,
-    }) {
+                }) {
+        this._gameId = gameId
         this._roomId = roomId;
         this._player1 = player1;
         this._player2 = player2;

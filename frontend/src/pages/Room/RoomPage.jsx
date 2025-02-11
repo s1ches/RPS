@@ -4,34 +4,17 @@ import GameComponent from "../../components/Game/GameComponent/GameComponent";
 import {useUserStore} from "../../stores/userStore";
 import {RoomStatus} from "../../models/Shared/roomStatus";
 import './styles/RoomPage.css'
-import Game from "../../models/Game";
-import {GameStatus} from "../../models/Shared/gameStatus";
-import {PlayerChoice} from "../../models/Shared/playerChoice";
 import {getRoom, leaveRoom} from "../../services/room";
+import {useRoom} from "../../stores/roomStore";
 
 const RoomPage = () => {
     const {roomId} = useParams();
     const {user} = useUserStore();
-    const player1Id = 'player-001';
-    const player2Id = 'player-002';
-    const [room, setRoom] = useState(null);
-    const [game, setGame] = useState(new Game({
-        id: "game-001",
-        roomId: roomId,
-        player1: player1Id,
-        player2: null,
-        rounds: [{player1Choice: PlayerChoice.Rock, player2Choice: PlayerChoice.Scissors, winner: player1Id}],
-        status: GameStatus.Started,
-        winnerId: null,
-        victories1: 0,
-        victories2: 0,
-    }));
-
+    const {room, setRoom, game, setGame} = useRoom();
     const [gameStarted, setGameStarted] = useState(false);
     let navigate = useNavigate();
 
     useEffect(() => {
-
         if (room.player1 && room.player2 && room.status === RoomStatus.WaitingForPlayer) {
             room.startGame();
             setGameStarted(true);
@@ -47,8 +30,6 @@ const RoomPage = () => {
             } else if (room.player1 && room.player2) {
                 alert("В комнате уже два игрока, невозможно присоединиться.");
             } else {
-
-
                 if (room.player1 && room.player2) {
                     room.startGame();
                     setGameStarted(true);
@@ -109,7 +90,6 @@ const RoomPage = () => {
             <div className="room-buttons">
                 {(
                     !gameStarted) &&
-                    user
                     (
                     <button onClick={joinGameOnClick}>Присоединиться</button>
                 )}

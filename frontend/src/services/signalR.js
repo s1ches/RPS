@@ -1,9 +1,8 @@
 import {HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import {useRoom} from "../stores/roomStore";
 
 let connection = null;
 
-export const connectToRoom = async () => {
+export const connectToRoom = async (eventHandlers) => {
     if (connection) {
         console.warn("⚠️ SignalR уже подключён");
         return connection;
@@ -16,10 +15,10 @@ export const connectToRoom = async () => {
         .configureLogging(LogLevel.Information)
         .build();
 
-    connection.on("JoinRoom", (spectatorModel) => handleNewSpectator(spectatorModel));
-    connection.on("KnowWinner", (winnerId) => handleWinner(winnerId));
-    connection.on("LeaveRoom", (leaveRoomModel) => handleLeavingRoom(leaveRoomModel));
-    connection.on("JoinGame", (message) => handleNewPlayer(message));
+    connection.on("JoinRoom", eventHandlers.onNewSpectator);
+    connection.on("KnowWinner", eventHandlers.onWinner);
+    connection.on("LeaveRoom", eventHandlers.onLeavingRoom);
+    connection.on("JoinGame", eventHandlers.onNewPlayer);
 
     try {
         await connection.start();
@@ -29,26 +28,6 @@ export const connectToRoom = async () => {
     }
 
     return connection;
-};
-
-const handleNewSpectator = (spectatorModel) => {
-    const {addSpectatorToRoom} = useRoom();
-    addSpectatorToRoom(spectatorModel);
-};
-
-const handleWinner = (winnerId) => {
-    const {setWinner} = useRoom();
-    setWinner(winnerId);
-};
-
-const handleLeavingRoom = (leaveRoomModel) => {
-    const {leaveRoom} = useRoom();
-    leaveRoom(leaveRoomModel);
-};
-
-const handleNewPlayer = (spectator) => {
-    const {JoinGame} = useRoom();
-    JoinGame(spectator);
 };
 
 export const disconnectFromRoom = async () => {

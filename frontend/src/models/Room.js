@@ -2,7 +2,7 @@ import {RoomStatus} from "./Shared/roomStatus";
 
 class Room {
     constructor({
-                    roomId,
+                    roomId = null,
                     player1 = null,
                     player2 = null,
                     maxRating = 0,

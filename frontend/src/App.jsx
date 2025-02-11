@@ -44,7 +44,7 @@ const App = () => {
                     <Route path="/" element={user.isAuth ? <HomePage/> : <Navigate to="/login" replace/>}/>
                     <Route path="/login" element={user.isAuth ? <Navigate to="/" replace/> : <LoginPage/>}/>
                     <Route path="/register" element={user.isAuth ? <Navigate to="/" replace/> : <RegisterPage/>}/>
-                    <Route path="/room/:id" element={user.isAuth ? <RoomPage /> : <Navigate to="/login" replace />}
+                    <Route path="/room/:roomId" element={user.isAuth ? <RoomPage /> : <Navigate to="/login" replace />}
                     />
                 </Routes>
             </div>

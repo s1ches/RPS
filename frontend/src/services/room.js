@@ -11,11 +11,11 @@ export const createRoom = async (maxAllowedGameRating) => {
 
 export const joinRoom = async (roomId) => {
     const response = await $gameApi.post('/rooms/join-room', roomId);
+    console.log(response);
     if (response.status === 200) {
         return {error: null};
     } else {
-        console.log(response);
-        return {error: response.data.Message};
+        return {error: response.error};
     }
 };
 
