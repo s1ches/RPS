@@ -15,10 +15,26 @@ public class MongoDbService(IMongoDatabase mongoDatabase) : IMongoDbService
         return await _userInfos.Find(filter).SingleOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<List<UserInfo>> GetUsersAsync(List<long> ids, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<UserInfo>.Filter.In(x => x.Id, ids);
+        return await _userInfos.Find(filter).ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> IsUserExistsAsync(long id, CancellationToken cancellationToken = default)
     {
         var filter = Builders<UserInfo>.Filter.Eq(x => x.Id, id);
         return await _userInfos.Find(filter).AnyAsync(cancellationToken);
+    }
+
+    public async Task<bool> IsAllUsersExistsAsync(List<long> ids, CancellationToken cancellationToken = default)
+    {
+        var count = await _userInfos.CountDocumentsAsync(
+            Builders<UserInfo>.Filter.In(u => u.Id, ids), 
+            cancellationToken: cancellationToken
+        );
+
+        return count == ids.Count;
     }
 
     public async Task<long> AddUserAsync(UserInfo userInfo, CancellationToken cancellationToken = default)

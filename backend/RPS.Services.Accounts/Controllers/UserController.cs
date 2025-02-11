@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using RPS.Common.Exceptions;
 using RPS.Common.MediatR;
 using RPS.Services.Accounts.Features.User.Queries.GetUserQuery;
+using RPS.Services.Accounts.Features.User.Queries.GetUsersInfosQuery;
 using RPS.Services.Accounts.Requests.User.GetUser;
+using RPS.Services.Accounts.Requests.User.GetUsersRatings;
 
 namespace RPS.Services.Accounts.Controllers;
 
@@ -26,6 +28,14 @@ public class UserController(IMediatr mediatr) : ControllerBase
 
         var parsedUserId = long.Parse(userId);
         return await mediatr.SendAsync<GetUserQuery, GetUserResponse>(new GetUserQuery(parsedUserId),
+            cancellationToken);
+    }
+
+    [HttpGet("/users-infos")]
+    public async Task<GetUsersInfosResponse> GetUsersInfos(GetUsersInfosRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await mediatr.SendAsync<GetUsersInfosQuery, GetUsersInfosResponse>(new GetUsersInfosQuery(request),
             cancellationToken);
     }
 }
