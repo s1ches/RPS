@@ -14,6 +14,8 @@ public class UserRatingConsumer(ILogger<UserStatusConsumer> logger, IMongoDbServ
         if(!await mongoDbService.IsUserExistsAsync(context.Message.UserId))
             throw new InfrastructureExceptionBase($"User with id doesn't exists: {context.Message.UserId}");
         
-        await mongoDbService.UpdateUserRatingAsync(context.Message.UserId, context.Message.Rating);
+        var user = await mongoDbService.GetUserAsync(context.Message.UserId);
+        var newRating = user.Rating + context.Message.AddRating;
+        await mongoDbService.UpdateUserRatingAsync(context.Message.UserId, newRating);
     }
 }

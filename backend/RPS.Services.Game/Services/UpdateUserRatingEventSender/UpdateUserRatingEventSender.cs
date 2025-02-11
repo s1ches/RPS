@@ -7,19 +7,19 @@ namespace RPS.Services.Game.Services.UpdateUserRatingEventSender;
 public class UpdateUserRatingEventSender(ILogger<UpdateUserRatingEventSender> logger, IPublishEndpoint publishEndpoint)
     : IUpdateUserRatingEventSender
 {
-    public async Task SendEventAsync(long userId, long rating, CancellationToken cancellationToken)
+    public async Task SendEventAsync(long userId, long addRating, CancellationToken cancellationToken)
     {
         var updateUserStatusEvent = new UpdateUserRatingEvent
         {
             UserId = userId,
-            Rating = rating
+            AddRating = addRating
         };
 
         await publishEndpoint.Publish(updateUserStatusEvent,
             context => { context.SetRoutingKey(RabbitMqConstants.UpdateUserRatingEventsRoutingKey); },
             cancellationToken);
 
-        logger.LogInformation("Update user status event sent, user with id: {id}, rating: {rating}", userId,
-            rating);
+        logger.LogInformation("Update user status event sent, user with id: {id}, add rating: {addRating}", userId,
+            addRating);
     }
 }
