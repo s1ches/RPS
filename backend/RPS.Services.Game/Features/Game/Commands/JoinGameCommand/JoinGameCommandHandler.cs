@@ -60,6 +60,13 @@ public class JoinGameCommandHandler(
                 GameStatus = GameStatus.Started,
                 CreateDate = DateTime.UtcNow,
             });
+
+            game.Rounds.Add(new Domain.Entities.Round
+            {
+                Status = GameStatus.Started,
+                CreateDate = DateTime.UtcNow + TimeSpan.FromSeconds(5)
+            });
+
             dbContext.Update(game);
         }
         

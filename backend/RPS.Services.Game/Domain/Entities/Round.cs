@@ -7,8 +7,10 @@ namespace RPS.Services.Game.Domain.Entities;
 public class Round : AuditableEntityBase
 {
     public long GameId { get; set; }
+
+    public Game Game { get; set; } = null!;
     
-    public GameStatus GameStatus { get; set; }
+    public GameStatus Status { get; set; }
     
     public long? WinnerId { get; set; }
     

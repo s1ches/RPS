@@ -4,5 +4,5 @@ public class UpdateUserRatingEvent
 {
     public long UserId { get; set; }
     
-    public long Rating { get; set; }
+    public long AddRating { get; set; }
 }

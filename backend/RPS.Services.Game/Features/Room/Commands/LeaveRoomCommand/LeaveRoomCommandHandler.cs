@@ -92,14 +92,14 @@ public class LeaveRoomCommandHandler(
             dbContext.Games.Update(game);
             dbContext.Rooms.Update(room);
 
-            var knowWinnerModel = new KnowWinnerModel
+            var knowWinnerModel = new KnowGameWinnerModel
             {
-                WinnerId = winnerId
+                GameWinnerId = winnerId
             };
             
             await roomHub.Clients
                 .Group(GroupNameHelper.GetGroupName<RoomHub>(room.Id))
-                .SendCoreAsync(RoomHubConstants.KnowWinner, [knowWinnerModel], cancellationToken);
+                .SendCoreAsync(RoomHubConstants.KnowGameWinner, [knowWinnerModel], cancellationToken);
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);

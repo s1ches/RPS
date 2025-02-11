@@ -18,10 +18,10 @@ public class GetRoomsQueryValidator(GameDbContext dbContext) : IValidator<GetRoo
         if (request.Limit <= 0)
             throw new ApplicationExceptionBase("Limit must be greater than 0", HttpStatusCode.BadRequest);
 
-        var gamesCount = await dbContext.Games.CountAsync(cancellationToken: cancellationToken);
+        var gamesCount = await dbContext.Rooms.CountAsync(cancellationToken: cancellationToken);
         
         if (gamesCount <= request.Offset)
-            throw new ApplicationExceptionBase("Offset is more then games we have in database",
+            throw new ApplicationExceptionBase("Offset is more then rooms we have in database",
                 HttpStatusCode.BadRequest);
 
         return new GetRoomsResponse();

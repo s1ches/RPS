@@ -13,6 +13,8 @@ public class MakeChoiceCommand : IRequest
         Choice = request.Choice;
     }
     
+    public long UserId { get; set; }
+    
     public long GameId { get; set; }
     
     public long RoundId { get; set; }

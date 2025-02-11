@@ -6,7 +6,9 @@ public static class RoomHubConstants
     
     public const string LeaveRoomMethodName = "LeaveRoom";
     
-    public const string KnowWinner = "KnowWinner";
+    public const string KnowRoundWinner = "KnowRoundWinner";
+    
+    public const string KnowGameWinner = "KnowGameWinner";
     
     public const string JoinGame = "JoinGame";
 }
